@@ -63,7 +63,7 @@ void	expand_env(t_list **token_list)
 		iter_next = iter->next;
 		i = 0;
 		if (ft_strchr(tmp, '$'))
-		{ 
+		{
 			while (tmp[i])
 			{
 				flag = 0;
@@ -85,8 +85,6 @@ void	expand_env(t_list **token_list)
 							i++;
 						if (tmp[i] == '$')
 						{
-							// if (!ft_strchr(tmp + i + 1, '$'))
-							// 	break;
 							exp_flag = 1;
 							expansion(iter, iter->content, &i);
 							tokenizer(iter->content, &tmp_list);
@@ -96,7 +94,6 @@ void	expand_env(t_list **token_list)
 							break;
 						}
 					}
-					// printf("i: %d c: %d\n", i, tmp[i]);
 					if (exp_flag)
 						break ;
 				}
@@ -149,5 +146,3 @@ int	main(void)
 		ft_lstclear(&token_list, free);
 	}
 }
-
-// aaa"$USER                   $                 $USER"aaa
