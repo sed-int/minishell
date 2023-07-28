@@ -63,7 +63,6 @@ void	expansion(t_list *node, char *content, int *idx)
 			while (content[i + key_size]
 				&& !ft_strchr("\'\"", content[i + key_size]))
 				{
-					// if (q_flag != '\'' && (content[i + key_size] == ' ' || content[i + key_size] == '$'))
 					if (q_flag != '\'' && content[i + key_size] == '$')
 						break ;
 					key_size++;
@@ -76,7 +75,6 @@ void	expansion(t_list *node, char *content, int *idx)
 	*idx = i;
 	free(node->content);
 	node->content = ft_lst_strjoin(&lst);
-	printf("idx: %d i: %d, strlen: %d\n", *idx, i ,(int)ft_strlen(node->content));
 	ft_lstclear(&lst, free);
 }
 
