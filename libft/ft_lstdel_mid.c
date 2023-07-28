@@ -1,21 +1,17 @@
 #include "libft.h"
 
-void	ft_lstdel_mid(t_list *iter)
+void	ft_lstdel_mid(t_list **lst, t_list *node)
 {
 	t_list	*prev;
 	t_list	*next;
 
-	prev = NULL;
-	next = NULL;
-	if (iter->prev)
-	{
-		prev = iter->prev; 
+	prev = node->prev;
+	next = node->next;
+	if (prev)
 		prev->next = next;
-	}
-	if (iter->next)
-	{
-		next = iter->next;
+	else
+		*lst = next;
+	if (next)
 		next->prev = prev;
-	}
-	ft_lstdelone(iter, free);
+	ft_lstdelone(node, free);
 }
