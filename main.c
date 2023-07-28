@@ -123,10 +123,9 @@ void	expand_env(t_list **token_list)
 }
 
 
-	void
-	list_print(void *content)
+void	list_print(void *content)
 {
-	printf("token: %s\n", content);
+	printf("token: %s\n", (char *)content);
 }
 
 int	main(void)
