@@ -1,5 +1,10 @@
 #include "minishell.h"
 
+int	ft_is_blank(int c)
+{
+	return (c == ' ' || c == '\t');
+}
+
 void	tokenizer(char *input, t_list **token_list)
 {
 	int		token_size;
@@ -9,9 +14,9 @@ void	tokenizer(char *input, t_list **token_list)
 	{
 		token_size = 0;
 		flag = 0;
-		while (*input == ' ')
+		while (ft_is_blank(*input))
 			input++;
-		while (*input && *input != ' ')
+		while (*input && !ft_is_blank(*input))
 		{
 			if (*input == '|')
 			{

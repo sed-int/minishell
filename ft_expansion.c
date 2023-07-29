@@ -25,7 +25,7 @@ void	expansion(t_list *node, char *content, int *idx)
 			i++;
 			while (content[i + key_size] && !is_delim(content[i + key_size]))
 			{
-				if (q_flag == '\"' && (content[i + key_size] == ' ' || content[i + key_size] == '$'))
+				if (q_flag == '\"' && (ft_is_blank(content[i + key_size]) || content[i + key_size] == '$'))
 					break ;
 				key_size++;
 			}
