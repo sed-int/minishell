@@ -128,20 +128,29 @@ void	list_print(void *content)
 	printf("token: %s\n", (char *)content);
 }
 
+void	token_print(t_token *node)
+{
+	printf("token: %s, type: %d len: %zu\n", node->content, node->type, ft_strlen(node->content));
+}
+
 int	main(void)
 {
 	char	*input;
 	t_list	*token_list;
+	t_token	*type_list;
 
 	token_list = NULL;
+	type_list = NULL;
 	while (1)
 	{
-		input = readline("$ ");
+		input = readline("🐮🦪> ");
 		add_history(input);
 		tokenizer(input, &token_list);
 		expand_env(&token_list);
+		identify_token_type(&token_list, &type_list);
 		free(input);
-		ft_lstiter(token_list, list_print);
-		ft_lstclear(&token_list, free);
+		ft_tokeniter(type_list, token_print);
+		syntax_error(&type_list); // 에러 코드 반환 시 continue;
+		ft_tokenclear(&type_list, free);
 	}
 }
