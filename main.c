@@ -149,8 +149,9 @@ int	main(void)
 		expand_env(&token_list);
 		identify_token_type(&token_list, &type_list);
 		free(input);
-		ft_tokeniter(type_list, token_print);
 		syntax_error(&type_list); // 에러 코드 반환 시 continue;
+		dequotenize(&type_list);
+		ft_tokeniter(type_list, token_print);
 		ft_tokenclear(&type_list, free);
 	}
 }
