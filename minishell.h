@@ -62,8 +62,8 @@ void	ft_tokeniter(t_token *lst, void (*f)(t_token *));
 void	ft_tokendel_mid(t_token **lst, t_token *node);
 int		ft_error(t_token **type_list, char *content);
 int		ft_is_blank(int c);
+int		ft_atouc(char *str, unsigned char *num);
 char	*ft_getenv(char **environ, char *word);
-
 t_cmd	*ft_cmd_new(void);
 void	ft_cmdadd_back(t_cmd **lst, t_cmd *new);
 void	ft_cmdclear(t_cmd **lst, void (*del)(void *));
