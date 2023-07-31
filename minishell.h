@@ -43,7 +43,7 @@ typedef struct s_token
 typedef struct s_cmd
 {
 	char			**simple_cmd;
-	t_token			**redir_header;
+	t_token			*redir_header;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }	t_cmd;
@@ -65,6 +65,7 @@ void	ft_tokenclear(t_token **lst, void (*del)(void *));
 void	ft_tokeniter(t_token *lst, void (*f)(t_token *));
 int		ft_error(char *content);
 int		ft_is_blank(int c);
+int		ft_atouc(char *str, unsigned char *num);
 
 void	dequotenize(t_token **type_list);
 
