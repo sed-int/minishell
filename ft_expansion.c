@@ -5,7 +5,7 @@ int	is_delim(char c)
 	return (c == '$' || c == '\'' || c == '\"');
 }
 
-void	expansion(t_list *node, char *content, int *idx)
+void	expansion(t_list *node, char *content, int *idx, char **environ)
 {
 	t_list	*lst = NULL;
 	char	*str;
@@ -30,13 +30,12 @@ void	expansion(t_list *node, char *content, int *idx)
 				key_size++;
 			}
 			str = ft_substr(content, i, key_size);
-			env = getenv(str);
+			env = ft_getenv(environ, str);
 			free(str);
 			if (env == NULL && key_size != 0)
-				env = "";
+				env = ft_strdup("");
 			else if (env == NULL && key_size == 0)
-				env = "$";
-			env = ft_strdup(env);
+				env = ft_strdup("$");
 			ft_lstadd_back(&lst, ft_lstnew(env));
 			i += key_size;
 		}

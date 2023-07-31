@@ -44,7 +44,7 @@ char	*substitute_env(int before_len, char *after, char *content)
 	return (env_subs);
 }
 
-void	expand_env(t_list **token_list)
+void	expand_env(t_list **token_list, char **environ)
 {
 	t_list	*iter;
 	t_list	*iter_next;
@@ -86,7 +86,7 @@ void	expand_env(t_list **token_list)
 						if (tmp[i] == '$')
 						{
 							exp_flag = 1;
-							expansion(iter, iter->content, &i);
+							expansion(iter, iter->content, &i, environ);
 							tokenizer(iter->content, &tmp_list);
 							ft_lstadd_mid(iter, &tmp_list);
 							ft_lstclear(&tmp_list, free);
@@ -102,7 +102,7 @@ void	expand_env(t_list **token_list)
 					if (tmp[i] == '$')
 					{
 						exp_flag = 1;
-						expansion(iter, iter->content, &i);
+						expansion(iter, iter->content, &i, environ);
 						tokenizer(iter->content, &tmp_list);
 						ft_lstadd_mid(iter, &tmp_list);
 						ft_lstclear(&tmp_list, free);
@@ -133,25 +133,57 @@ void	token_print(t_token *node)
 	printf("token: %s, type: %d len: %zu\n", node->content, node->type, ft_strlen(node->content));
 }
 
-int	main(void)
+char **dup_envp(char **envp)
+{
+	char **environ;
+	int	i;
+
+	i = 0;
+	while (envp[i])
+		i++;
+	environ = (char **)malloc(sizeof(char *) * (i + 1));
+	i = -1;
+	while (envp[++i])
+		environ[i] = ft_strdup(envp[i]);
+	environ[i] = NULL;
+	return (environ);
+}
+
+void	print_env(char **environ)
+{
+	int i = -1;
+	while (environ[++i])
+		printf("environ : %s\n", environ[i]);
+}
+
+int	main(int ac, char **av, char **envp)
 {
 	char	*input;
+	char	**environ;
 	t_list	*token_list;
 	t_token	*type_list;
+	t_cmd	*pipeline;
 
 	token_list = NULL;
 	type_list = NULL;
+	environ = dup_envp(envp);
+	// print_env(environ);
+	(void)ac;
+	(void)av;
 	while (1)
 	{
 		input = readline("🐮🦪> ");
 		add_history(input);
 		tokenizer(input, &token_list);
-		expand_env(&token_list);
+		expand_env(&token_list, environ);
 		identify_token_type(&token_list, &type_list);
 		free(input);
-		syntax_error(&type_list); // 에러 코드 반환 시 continue;
+		if (syntax_error(&type_list) == SYNTAX_ERROR)
+			continue; // 에러 코드 반환 시 continue;
 		dequotenize(&type_list);
-		ft_tokeniter(type_list, token_print);
+		// ft_tokeniter(type_list, token_print);
+		pipeline = struct_cmd(&type_list);
+		ft_cmdclear(&pipeline, free);
 		ft_tokenclear(&type_list, free);
 	}
 }

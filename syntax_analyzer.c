@@ -10,7 +10,7 @@ void	identify_token_type(t_list **token_list, t_token **type_list)
 	while (iter)
 	{
 		word = ft_strdup(iter->content);
-		token = ft_token_new(word);
+		token = ft_token_new(-1, word);
 		if (!ft_strcmp("<", word))
 			token->type = LSR;
 		else if (!ft_strcmp(">", word))
@@ -36,20 +36,25 @@ int	syntax_error(t_token **type_list)
 	if (!*type_list)
 		return (SYNTAX_SUCCESS);
 	iter = *type_list;
+	if (iter->type == PIPE)
+		return (ft_error(type_list, "|"));
 	while (iter->next)
 	{
-		if (iter->type != WORD && iter->next->type != WORD)
-			return (ft_error(iter->next->content));
+		if (iter->type <= D_LSR && iter->next->type != WORD)
+			return (ft_error(type_list, iter->next->content));
+		if (iter->type == PIPE && iter->next->type == PIPE)
+			return (ft_error(type_list, iter->next->content));
 		iter = iter->next;
 	}
 	if (iter->type != WORD)
-		return (ft_error("newline"));
+		return (ft_error(type_list, "newline"));
 	return (SYNTAX_SUCCESS);
 }
 
-int	ft_error(char *content)
+int	ft_error(t_token **type_list, char *content)
 {
 	ft_putstr_fd(SYNTAX_ERROR_MSG, 2);
 	ft_putendl_fd(content, STDERR_FILENO);
+	ft_tokenclear(type_list, free);
 	return (SYNTAX_ERROR);
 }
