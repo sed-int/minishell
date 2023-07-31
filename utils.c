@@ -26,14 +26,14 @@ int	ft_strcmp(char *s1, char *s2)
 	return (us1[i] - us2[i]);
 }
 
-t_token	*ft_token_new(void *content)
+t_token	*ft_token_new(int type, void *content)
 {
 	t_token	*tmp;
 
 	tmp = (t_token *)malloc(sizeof(t_token));
 	if (!tmp)
 		return (0);
-	tmp->type = -1;
+	tmp->type = type;
 	tmp->content = content;
 	tmp->next = NULL;
 	tmp->prev = NULL;
@@ -57,6 +57,30 @@ void	ft_tokenadd_back(t_token **lst, t_token *new)
 		tmp = tmp->next;
 	tmp->next = new;
 	new->prev = tmp;
+}
+
+void ft_tokendelone(t_token *lst, void (*del)(void *))
+{
+	if (!lst || !del)
+		return;
+	del(lst->content);
+	free(lst);
+}
+
+void ft_tokendel_mid(t_token **lst, t_token *node)
+{
+	t_token *prev;
+	t_token *next;
+
+	prev = node->prev;
+	next = node->next;
+	if (prev)
+		prev->next = next;
+	else
+		*lst = next;
+	if (next)
+		next->prev = prev;
+	ft_tokendelone(node, free);
 }
 
 void	ft_tokenclear(t_token **lst, void (*del)(void *))
@@ -128,3 +152,25 @@ int	ft_atouc(char *str, unsigned char *num)
 	*num = (unsigned char)(result * sign);
 	return (1);
 }
+
+char	*ft_getenv(char **environ, char *word)
+{
+	char	*ret;
+	char	*str;
+	size_t	wd_len;
+	int		i;
+
+	wd_len = ft_strlen(word);
+	str	= NULL;
+	i = -1;
+	while (environ[++i] && !str)
+		str = ft_strnstr(environ[i], word, wd_len);
+	printf("str: %s\n", str);
+	if (str)
+		ret = ft_substr(str, wd_len + 1, ft_strlen(str));
+	else
+		ret = NULL;
+	printf("ret: %s\n", ret);
+	return (ret);
+}
+
