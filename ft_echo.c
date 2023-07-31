@@ -13,7 +13,6 @@ int	check_more_newline(char **simple_cmd)
 			break ;
 	}
 	return (i);
-
 }
 
 void	ft_echo(char **simple_cmd, int fd)
