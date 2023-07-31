@@ -44,7 +44,7 @@ char	*substitute_env(int before_len, char *after, char *content)
 	return (env_subs);
 }
 
-void	expand_env(t_list **token_list, char **environ)
+void	expand_env(t_list **token_list, t_list **environ)
 {
 	t_list	*iter;
 	t_list	*iter_next;
@@ -133,19 +133,14 @@ void	token_print(t_token *node)
 	printf("token: %s, type: %d len: %zu\n", node->content, node->type, ft_strlen(node->content));
 }
 
-char **dup_envp(char **envp)
+t_list *dup_envp(char **envp)
 {
-	char **environ;
+	t_list	*environ;
 	int	i;
 
-	i = 0;
-	while (envp[i])
-		i++;
-	environ = (char **)malloc(sizeof(char *) * (i + 1));
 	i = -1;
 	while (envp[++i])
-		environ[i] = ft_strdup(envp[i]);
-	environ[i] = NULL;
+		ft_lstadd_back(&environ, ft_lstnew(ft_strdup(envp[i])));
 	return (environ);
 }
 
@@ -159,7 +154,7 @@ void	print_env(char **environ)
 int	main(int ac, char **av, char **envp)
 {
 	char	*input;
-	char	**environ;
+	t_list	*environ;
 	t_list	*token_list;
 	t_token	*type_list;
 	t_cmd	*pipeline;
@@ -175,7 +170,7 @@ int	main(int ac, char **av, char **envp)
 		input = readline("🐮🦪> ");
 		add_history(input);
 		tokenizer(input, &token_list);
-		expand_env(&token_list, environ);
+		expand_env(&token_list, &environ);
 		identify_token_type(&token_list, &type_list);
 		free(input);
 		if (syntax_error(&type_list) == SYNTAX_ERROR)

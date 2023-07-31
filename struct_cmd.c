@@ -40,7 +40,7 @@ void	print_cmd(t_cmd *pipeline)
 		tmp = iter->simple_cmd;
 		while (*tmp)
 		{
-			printf("[%s] ", *tmp);
+			printf("token : %s ", *tmp);
 			tmp++;
 		}
 		printf("\n");

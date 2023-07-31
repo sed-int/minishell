@@ -48,7 +48,7 @@ int		is_delim_in_dquote(char c);
 void	tokenizer(char *input, t_list **token_list);
 void	list_print(void *content);
 void	make_token(char *input, t_list **token_list, int token_size);
-void	expansion(t_list *node, char *content, int *idx, char **environ);
+void	expansion(t_list *node, char *content, int *idx, t_list **environ);
 void	identify_token_type(t_list **lst, t_token **token_lst);
 int		syntax_error(t_token **type_list);
 
@@ -63,11 +63,11 @@ void	ft_tokendel_mid(t_token **lst, t_token *node);
 int		ft_error(t_token **type_list, char *content);
 int		ft_is_blank(int c);
 int		ft_atouc(char *str, unsigned char *num);
-char	*ft_getenv(char **environ, char *word);
+char	*ft_getenv(t_list **environ, char *word);
 t_cmd	*ft_cmd_new(void);
 void	ft_cmdadd_back(t_cmd **lst, t_cmd *new);
 void	ft_cmdclear(t_cmd **lst, void (*del)(void *));
-void dequotenize(t_token **type_list);
+void	dequotenize(t_token **type_list);
 
 t_cmd	*struct_cmd(t_token **type_list);
 
