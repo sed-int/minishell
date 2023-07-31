@@ -22,8 +22,8 @@ void	ft_exit(char **simple_cmd)
 	exit(exit_status);
 }
 
-int	main(int argc, char **argv)
-{
-	unsigned char num = 0;
-	ft_exit(argv);
-}
+// int	main(int argc, char **argv)
+// {
+// 	unsigned char num = 0;
+// 	ft_exit(argv);
+// }

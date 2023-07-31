@@ -173,4 +173,3 @@ char	*ft_getenv(char **environ, char *word)
 	printf("ret: %s\n", ret);
 	return (ret);
 }
-
