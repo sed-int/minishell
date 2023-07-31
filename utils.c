@@ -153,23 +153,24 @@ int	ft_atouc(char *str, unsigned char *num)
 	return (1);
 }
 
-char	*ft_getenv(char **environ, char *word)
+char	*ft_getenv(t_list **environ, char *word)
 {
 	char	*ret;
 	char	*str;
 	size_t	wd_len;
-	int		i;
+	t_list	*iter;
 
+	iter = *environ;
 	wd_len = ft_strlen(word);
 	str	= NULL;
-	i = -1;
-	while (environ[++i] && !str)
-		str = ft_strnstr(environ[i], word, wd_len);
-	printf("str: %s\n", str);
+	while (iter && !str)
+	{
+		str = ft_strnstr(iter->content, word, wd_len);
+		iter = iter->next;
+	}
 	if (str)
 		ret = ft_substr(str, wd_len + 1, ft_strlen(str));
 	else
 		ret = NULL;
-	printf("ret: %s\n", ret);
 	return (ret);
 }

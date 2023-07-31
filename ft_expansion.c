@@ -5,7 +5,7 @@ int	is_delim(char c)
 	return (c == '$' || c == '\'' || c == '\"');
 }
 
-void	expansion(t_list *node, char *content, int *idx, char **environ)
+void	expansion(t_list *node, char *content, int *idx, t_list **environ)
 {
 	t_list	*lst = NULL;
 	char	*str;
