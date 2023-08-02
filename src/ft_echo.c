@@ -15,10 +15,12 @@ int	check_more_newline(char **simple_cmd)
 	return (i);
 }
 
-void	ft_echo(char **simple_cmd, int fd)
+void	ft_echo(char **simple_cmd, t_list **environ, int fd)
 {
 	int	i;
 
+	if (!environ)
+		return ;
 	if (simple_cmd[1] != NULL && !ft_strcmp("-n", simple_cmd[1]))
 	{
 		i = check_more_newline(simple_cmd);
@@ -29,7 +31,7 @@ void	ft_echo(char **simple_cmd, int fd)
 				ft_putstr_fd(" ", fd);
 			i++;
 		}
-		exit(0);
+		return ;
 	}
 	i = 1;
 	while (simple_cmd[i] != NULL)

@@ -125,12 +125,12 @@ void	expand_env(t_list **token_list, t_list **environ)
 
 void	list_print(void *content)
 {
-	printf("token: %s\n", (char *)content);
+	printf("token: [%s]\n", (char *)content);
 }
 
 void	token_print(t_token *node)
 {
-	printf("token: %s, type: %d len: %zu\n", node->content, node->type, ft_strlen(node->content));
+	printf("token: [%s], type: %d len: %zu\n", node->content, node->type, ft_strlen(node->content));
 }
 
 t_list *dup_envp(char **envp)
@@ -162,7 +162,6 @@ int	main(int ac, char **av, char **envp)
 	token_list = NULL;
 	type_list = NULL;
 	environ = dup_envp(envp);
-	// print_env(environ);
 	(void)ac;
 	(void)av;
 	while (1)
@@ -170,14 +169,15 @@ int	main(int ac, char **av, char **envp)
 		input = readline("🐮🦪> ");
 		add_history(input);
 		tokenizer(input, &token_list);
+		// ft_lstiter(token_list, list_print);
 		expand_env(&token_list, &environ);
 		identify_token_type(&token_list, &type_list);
 		free(input);
 		if (syntax_error(&type_list) == SYNTAX_ERROR)
-			continue; // 에러 코드 반환 시 continue;
+			continue ;
 		dequotenize(&type_list);
-		// ft_tokeniter(type_list, token_print);
 		pipeline = struct_cmd(&type_list);
+		ft_exec(&pipeline, &environ);
 		ft_cmdclear(&pipeline, free);
 		ft_tokenclear(&type_list, free);
 	}

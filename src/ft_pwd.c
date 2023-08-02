@@ -3,10 +3,12 @@
 /**
  * pwd will absolutely run in child process.
 */
-void	ft_pwd(char **simple_cmd, int fd)
+void	ft_pwd(char **simple_cmd, t_list **environ, int fd)
 {
 	char	*str;
 
+	if (!environ)
+		return ;
 	if (simple_cmd[1] != NULL && simple_cmd[1][0] == '-')
 	{
 		ft_putstr_fd("bash: ", 2);
@@ -15,6 +17,7 @@ void	ft_pwd(char **simple_cmd, int fd)
 		ft_putendl_fd("pwd: no option", 2);
 		exit(1);
 	}
+	str = NULL;
 	str = getcwd(str, 0);
 	ft_putendl_fd(str, fd);
 	free(str);
