@@ -14,12 +14,24 @@ int	print_export_err(char *str)
 	return (0);
 }
 
+char	*make_word(char *str)
+{
+	char	*ret;
+	int		i;
+
+	i = 0;
+	while (str[i] && str[i] != '=')
+		i++;
+	ret = ft_substr(str, 0, i);
+	return (ret);
+}
+
 int	is_valid_export_arg(char *str)
 {
 	int	i;
 
 	i = 0;
-	while (str[i] && str[i] != '=')
+	while (str[i])
 	{
 		if (ft_isdigit(str[0]))
 			return (print_export_err(str));
@@ -27,26 +39,33 @@ int	is_valid_export_arg(char *str)
 			return (print_export_err(str));
 		++i;
 	}
-	if (i == 1)
+	if (i == 0)
 		return (print_export_err(str));
 	return (1);
 }
 
-void	ft_export(char **simple_cmd, t_list **environ, int *status)
+void	ft_export(char **simple_cmd, t_list **environ, int fd)
 {
-	char	**tmp;
 	int		i;
+	char	*word;
+	t_list	*tmp;
 
+	(void)fd;
 	i = 0;
 	while (simple_cmd[++i])
 	{
-		if (is_valid_export_arg(simple_cmd[i]))
+		word = make_word(simple_cmd[i]);
+		if (is_valid_export_arg(word))
 		{
+			tmp = ft_getenvnode(environ, simple_cmd[i]);
+			if (tmp)
+				ft_lstdel_mid(environ, tmp);
 			ft_lstadd_back(environ, ft_lstnew(ft_strdup(simple_cmd[1])));
-			*status = 0;
+			// *status = 0;
 		}
-		else
-			*status = 1;
+		free(word);
+		// else
+			// *status = 1;
 	}
 }
 

@@ -82,7 +82,7 @@ t_cmd	*struct_cmd(t_token **type_list)
 	t_cmd	*cmd;
 	t_token	*iter;
 	t_token	*word_list;
-	t_token *new;
+	t_token	*new;
 
 	iter = *type_list;
 	pipeline = NULL;
@@ -92,7 +92,8 @@ t_cmd	*struct_cmd(t_token **type_list)
 	{
 		if (iter->type == WORD)
 		{
-			ft_tokenadd_back(&word_list, ft_token_new(WORD, ft_strdup(iter->content)));
+			ft_tokenadd_back(&word_list, \
+				ft_token_new(WORD, ft_strdup(iter->content)));
 		}
 		else if (iter->type == PIPE)
 		{
@@ -107,11 +108,14 @@ t_cmd	*struct_cmd(t_token **type_list)
 			new = ft_token_new(iter->type, ft_strdup(iter->content));
 			ft_tokenadd_back(&(cmd->redir_header), new);
 		}
+		if (iter->next == NULL)
+		{
+			cmd->simple_cmd = make_simple_cmd(word_list);
+			ft_tokenclear(&word_list, free);
+			ft_cmdadd_back(&pipeline, cmd);
+		}
 		iter = iter->next;
 	}
-	cmd->simple_cmd = make_simple_cmd(word_list);
-	ft_tokenclear(&word_list, free);
-	ft_cmdadd_back(&pipeline, cmd);
 	print_cmd(pipeline);
 	return (pipeline);
 }

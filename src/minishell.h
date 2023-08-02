@@ -1,10 +1,11 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include "libft.h"
+# include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include "libft.h"
+# include <dirent.h>
 
 # define SYNTAX_SUCCESS	0
 # define SYNTAX_ERROR	258
@@ -40,6 +41,7 @@ typedef struct s_cmd
 {
 	char			**simple_cmd;
 	t_token			*redir_header;
+	int				io_fd[2];
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }	t_cmd;
@@ -72,6 +74,20 @@ void	dequotenize(t_token **type_list);
 t_cmd	*struct_cmd(t_token **type_list);
 
 void token_print(t_token *node); // to delete
+
+//built-in
+void	ft_export(char **simple_cmd, t_list **environ, int fd);
+void	ft_cd(char **simple_cmd, t_list **environ, int fd);
+void	ft_pwd(char **simple_cmd, t_list **environ, int fd);
+void	ft_unset(char **simple_cmd, t_list **environ, int fd);
+void	ft_exit(char **simple_cmd, t_list **environ, int fd);
+void	ft_env(char **simple_cmd, t_list **environ, int fd);
+void	ft_echo(char **simple_cmd, t_list **environ, int fd);
+void	run_cmd(t_cmd *cmd, t_list **environ);
+t_list	*ft_getenvnode(t_list **environ, char *word);
+
+
+void	ft_exec(t_cmd **pipeline, t_list **environ);
 
 #endif
 

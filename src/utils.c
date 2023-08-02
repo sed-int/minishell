@@ -14,17 +14,34 @@ int	ft_strcmp(char *s1, char *s2)
 	i = 0;
 	us1 = (unsigned char *)s1;
 	us2 = (unsigned char *)s2;
-	while (us1[i] != '\0' && us2[i] != '\0')
+	while (us1[i] || us2[i])
 	{
-		if (us1[i] == us2[i])
-		{
-			i++;
-		}
-		else
+		if (us1[i] - us2[i])
 			return (us1[i] - us2[i]);
+		i++;
 	}
-	return (us1[i] - us2[i]);
+	return (0);
 }
+// int	ft_strcmp(char *s1, char *s2)
+// {
+// 	int				i;
+// 	unsigned char	*us1;
+// 	unsigned char	*us2;
+
+// 	i = 0;
+// 	us1 = (unsigned char *)s1;
+// 	us2 = (unsigned char *)s2;
+// 	while (us1[i] != '\0' || us2[i] != '\0')
+// 	{
+// 		if (us1[i] == us2[i])
+// 		{
+// 			i++;
+// 		}
+// 		else
+// 			return (us1[i] - us2[i]);
+// 	}
+// 	return (us1[i] - us2[i]);
+// }
 
 t_token	*ft_token_new(int type, void *content)
 {
@@ -157,20 +174,24 @@ char	*ft_getenv(t_list **environ, char *word)
 {
 	char	*ret;
 	char	*str;
+	int		is_match;
 	size_t	wd_len;
 	t_list	*iter;
 
 	iter = *environ;
 	wd_len = ft_strlen(word);
-	str	= NULL;
-	while (iter && !str)
+	is_match = 1;
+	ret = NULL;
+	str = ft_strjoin(word, "=");
+	while (iter)
 	{
-		str = ft_strnstr(iter->content, word, wd_len);
+		is_match = ft_strncmp(iter->content, str, wd_len + 1);
+		if (!is_match)
+			break ;
 		iter = iter->next;
 	}
-	if (str)
-		ret = ft_substr(str, wd_len + 1, ft_strlen(str));
-	else
-		ret = NULL;
+	free(str);
+	if (!is_match)
+		ret = ft_substr(iter->content, wd_len + 1, ft_strlen(iter->content));
 	return (ret);
 }
