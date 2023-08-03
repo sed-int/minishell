@@ -19,6 +19,8 @@ t_cmd *ft_cmd_new(void)
 	tmp = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!tmp)
 		return (0);
+	tmp->io_fd[0] = 0;
+	tmp->io_fd[1] = 1;
 	tmp->simple_cmd = NULL;
 	tmp->redir_header = NULL;
 	tmp->next = NULL;
@@ -60,4 +62,19 @@ void ft_cmdclear(t_cmd **lst, void (*del)(void *))
 		free(tmp);
 	}
 	lst = NULL;
+}
+
+char **detec_path(t_list **environ)
+{
+	t_list	*iter;
+	char	**res;
+
+	iter = *environ;
+	while (iter)
+	{
+		if (!ft_strncmp(iter->content, "PATH=", 5))
+			res = ft_split((iter->content) + 5, ':');
+		iter = iter->next;
+	}
+	return (res);
 }

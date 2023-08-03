@@ -88,7 +88,11 @@ void	run_cmd(t_cmd *cmd, t_list **environ);
 t_list	*ft_getenvnode(t_list **environ, char *word);
 
 void	change_heredoc(t_cmd **pipeline);
-void	ft_exec(t_cmd **pipeline, t_list **environ);
+int		init_redir(t_cmd *cmd);
+void 	ft_exec(t_cmd **pipeline, t_list **environ);
+
+int count_pipe(t_cmd **pipeline);
+void while_pipe(t_cmd **pipeline);
 
 #endif
 
