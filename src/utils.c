@@ -22,26 +22,6 @@ int	ft_strcmp(char *s1, char *s2)
 	}
 	return (0);
 }
-// int	ft_strcmp(char *s1, char *s2)
-// {
-// 	int				i;
-// 	unsigned char	*us1;
-// 	unsigned char	*us2;
-
-// 	i = 0;
-// 	us1 = (unsigned char *)s1;
-// 	us2 = (unsigned char *)s2;
-// 	while (us1[i] != '\0' || us2[i] != '\0')
-// 	{
-// 		if (us1[i] == us2[i])
-// 		{
-// 			i++;
-// 		}
-// 		else
-// 			return (us1[i] - us2[i]);
-// 	}
-// 	return (us1[i] - us2[i]);
-// }
 
 t_token	*ft_token_new(int type, void *content)
 {

@@ -167,7 +167,13 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		input = readline("🐮🦪> ");
+		if (!input)
+		{
+			ft_putendl_fd("\nexit", 1);
+			exit(0);
+		}
 		add_history(input);
+		printf("111\n");
 		tokenizer(input, &token_list);
 		// ft_lstiter(token_list, list_print);
 		expand_env(&token_list, &environ);
@@ -177,8 +183,15 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		dequotenize(&type_list);
 		pipeline = struct_cmd(&type_list);
+		//히어독 임시파일 모두 만들고 치환
+		change_heredoc(&pipeline);
+		// 각 프로세스에서 infile 확인, 어펜드 하는데 내가 권한 없는파일이면 에러
+		while_pipe(&pipeline);
+		// 커맨드가 한개인지 확인, 한개라면 부모, 나머지는 자식 실행
+		count_pipe(&pipeline);
 		ft_exec(&pipeline, &environ);
 		ft_cmdclear(&pipeline, free);
 		ft_tokenclear(&type_list, free);
 	}
+	// exit(status);
 }
