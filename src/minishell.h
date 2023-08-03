@@ -6,6 +6,7 @@
 # include <readline/history.h>
 # include "libft.h"
 # include <dirent.h>
+# include <fcntl.h>
 
 # define SYNTAX_SUCCESS	0
 # define SYNTAX_ERROR	258
@@ -73,7 +74,7 @@ void	dequotenize(t_token **type_list);
 
 t_cmd	*struct_cmd(t_token **type_list);
 
-void token_print(t_token *node); // to delete
+void	token_print(t_token *node); // to delete
 
 //built-in
 void	ft_export(char **simple_cmd, t_list **environ, int fd);
@@ -86,7 +87,7 @@ void	ft_echo(char **simple_cmd, t_list **environ, int fd);
 void	run_cmd(t_cmd *cmd, t_list **environ);
 t_list	*ft_getenvnode(t_list **environ, char *word);
 
-
+void	change_heredoc(t_cmd **pipeline);
 void	ft_exec(t_cmd **pipeline, t_list **environ);
 
 #endif

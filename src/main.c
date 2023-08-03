@@ -177,6 +177,10 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		dequotenize(&type_list);
 		pipeline = struct_cmd(&type_list);
+		//히어독 임시파일 모두 만들고 치환
+		//커맨드가 한개인지 확인, 한개라면 부모, 나머지는 자식 실행
+		//각 프로세스에서 infile 확인, 어펜드 하는데 내가 권한 없는파일이면 에러
+		change_heredoc(&pipeline);
 		ft_exec(&pipeline, &environ);
 		ft_cmdclear(&pipeline, free);
 		ft_tokenclear(&type_list, free);

@@ -4,6 +4,8 @@ int	is_built_in(char **simple_cmd)
 {
 	char	*cmd;
 
+	if (!*simple_cmd)
+		return (-1);
 	cmd = simple_cmd[0];
 	if (!ft_strcmp(cmd, "exit"))
 		return (0);
