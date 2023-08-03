@@ -78,3 +78,26 @@ char **detec_path(t_list **environ)
 	}
 	return (res);
 }
+
+char *valid(char **path, char *command)
+{
+	char *tmp;
+	char *path_cmd;
+	int	i;
+
+	i = 0;
+	path_cmd = ft_strjoin("/", command);
+	while (path[i])
+	{
+		tmp = ft_strjoin(path[i], path_cmd);
+		if (access(tmp, F_OK) > -1)
+		{
+			free(path_cmd);
+			return (tmp);
+		}
+		free(tmp);
+		i++;
+	}
+	free(path_cmd);
+	return (NULL);
+}
