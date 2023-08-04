@@ -12,6 +12,8 @@
 # define SYNTAX_ERROR	258
 # define SYNTAX_ERROR_MSG "minishell: syntax error near unexpected token: "
 
+int	error_status;
+
 enum	e_type
 {
 	GRT,
@@ -47,7 +49,17 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
-int		is_delim_in_dquote(char c);
+typedef struct s_exec
+{
+	int repeat_fork;
+	int count;
+	int fds_prev[2];
+	int fds_next[2];
+	char **path;
+} t_exec;
+
+	int
+	is_delim_in_dquote(char c);
 void	tokenizer(char *input, t_list **token_list);
 void	list_print(void *content);
 void	make_token(char *input, t_list **token_list, int token_size);
@@ -73,8 +85,9 @@ void	ft_cmdclear(t_cmd **lst, void (*del)(void *));
 void	dequotenize(t_token **type_list);
 
 t_cmd	*struct_cmd(t_token **type_list);
+char 	**detec_path(t_list **environ);
 
-void	token_print(t_token *node); // to delete
+	void token_print(t_token *node); // to delete
 
 //built-in
 void	ft_export(char **simple_cmd, t_list **environ, int fd);
@@ -84,7 +97,7 @@ void	ft_unset(char **simple_cmd, t_list **environ, int fd);
 void	ft_exit(char **simple_cmd, t_list **environ, int fd);
 void	ft_env(char **simple_cmd, t_list **environ, int fd);
 void	ft_echo(char **simple_cmd, t_list **environ, int fd);
-void	run_cmd(t_cmd *cmd, t_list **environ);
+int		run_cmd(t_cmd *cmd, t_list **environ);
 t_list	*ft_getenvnode(t_list **environ, char *word);
 
 void	change_heredoc(t_cmd **pipeline);
@@ -93,6 +106,8 @@ void 	ft_exec(t_cmd **pipeline, t_list **environ);
 
 int count_pipe(t_cmd **pipeline);
 void while_pipe(t_cmd **pipeline);
+void pipexline(t_cmd **pipeline, t_list **env);
+char *valid(char **path, char *command);
 
 #endif
 

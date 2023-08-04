@@ -24,6 +24,7 @@ void	ft_unset(char **simple_cmd, t_list **environ, int fd)
 	(void)fd;
 	tmp = NULL;
 	i = 0;
+	error_status = 0;
 	while (simple_cmd[++i])
 	{
 		tmp = ft_getenvnode(environ, simple_cmd[i]);
