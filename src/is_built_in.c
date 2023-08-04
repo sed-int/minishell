@@ -24,7 +24,7 @@ int	is_built_in(char **simple_cmd)
 	return (-1);
 }
 
-void	run_cmd(t_cmd *cmd, t_list **environ)
+int	run_cmd(t_cmd *cmd, t_list **environ)
 {
 	void	(*f[7])(char **, t_list **, int);
 	int		idx;
@@ -38,7 +38,10 @@ void	run_cmd(t_cmd *cmd, t_list **environ)
 	f[6] = ft_echo;
 	idx = is_built_in(cmd->simple_cmd);
 	if (idx > -1)
+	{
 		f[idx](cmd->simple_cmd, environ, 1);
+		return (1);
+	}
 	else
-		return ; //execve
+		return (0); //execve
 }

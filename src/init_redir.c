@@ -5,10 +5,6 @@ int init_redir(t_cmd *cmd)
 	t_token	*redir_iter;
 	int		type;
 
-	// cmd->io_fd[0] = 0;
-	// cmd->io_fd[1] = 1;
-	// dup2(cmd->io_fd[0], STDIN_FILENO);
-	// dup2(cmd->io_fd[1], STDOUT_FILENO);
 	redir_iter = cmd->redir_header;
 	while (redir_iter)
 	{

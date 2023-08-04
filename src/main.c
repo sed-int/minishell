@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+
 void make_token(char *input, t_list **token_list, int token_size)
 {
 	char *token;
@@ -151,6 +152,21 @@ void	print_env(char **environ)
 		printf("environ : %s\n", environ[i]);
 }
 
+char	*get_pwd()
+{
+	char	**spl;
+	char	*tmp;
+	int		size;
+
+	tmp = getcwd(NULL, 0);
+	spl = ft_split(tmp, '/');
+	free(tmp);
+	size = 0;
+	while (spl[size])
+		size++;
+	return (ft_strjoin(spl[size - 1], " ] 🐮🦪 ] "));
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	char	*input;
@@ -159,21 +175,26 @@ int	main(int ac, char **av, char **envp)
 	t_token	*type_list;
 	t_cmd	*pipeline;
 
+	// char *tmp[4] = {"cat", "./parshell.txt", "\0"};
+	// int pid = fork();
+	// if (pid == 0)
+	// {
+	// 	execve("/usr/bin/cat", tmp, 0);
+	// }
 	token_list = NULL;
 	type_list = NULL;
 	environ = dup_envp(envp);
-	(void)ac;
+	(void) ac;
 	(void)av;
 	while (1)
 	{
-		input = readline("🐮🦪> ");
+		input = readline(get_pwd());
 		if (!input)
 		{
 			ft_putendl_fd("\nexit", 1);
-			exit(0);
+			exit(1);
 		}
 		add_history(input);
-		printf("111\n");
 		tokenizer(input, &token_list);
 		// ft_lstiter(token_list, list_print);
 		expand_env(&token_list, &environ);
@@ -186,10 +207,11 @@ int	main(int ac, char **av, char **envp)
 		//히어독 임시파일 모두 만들고 치환
 		change_heredoc(&pipeline);
 		// 각 프로세스에서 infile 확인, 어펜드 하는데 내가 권한 없는파일이면 에러
-		while_pipe(&pipeline);
+		// while_pipe(&pipeline);
 		// 커맨드가 한개인지 확인, 한개라면 부모, 나머지는 자식 실행
-		count_pipe(&pipeline);
-		ft_exec(&pipeline, &environ);
+		// count_pipe(&pipeline);
+		
+		pipexline(&pipeline, &environ);
 		ft_cmdclear(&pipeline, free);
 		ft_tokenclear(&type_list, free);
 	}
