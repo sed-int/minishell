@@ -25,21 +25,22 @@ OBJ			=	$(SRC:.c=.o)
 
 NAME		= minishell
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror
-LFLAGS		= -Llibft -lft -lreadline -lhistory -L/Users/$(USER)/.brew/opt/readline/lib -Ilibft -I/Users/$(USER)/.brew/opt/readline/include
-RM			= rm -f
+CFLAGS		= -Wall -Wextra -Werror -Qunused-arguments
+# LDFLAGS	= -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include -lreadline
+LDFLAGS		= -L/opt/homebrew/opt/readline/lib -I/opt/homebrew/opt/readline/include -lreadline
+LIBFLAGS	= -Llibft -lft -Ilibft
 
 all:		$(NAME)
 
 $(NAME): 	$(OBJ) $(LIBFT)
-		@$(CC) $(LFLAGS) $(OBJ) -o $(NAME) -g -fsanitize=address
+		@$(CC) $(LIBFLAGS) $(LDFLAGS) $(OBJ) -o $(NAME) -g -fsanitize=address
 		@echo $(GREEN)"minishell made." $(EOC)
 
 $(LIBFT):
 		@make --no-print-directory -C ./libft bonus
 
 %.o: 		%.c
-		@$(CC) $(CFLAGS) -I/Users/$(USER)/.brew/opt/readline/include -c $< -o $@ -Ilibft
+		@$(CC) $(CFLAGS) $(LIBFLAGS) $(LDFLAGS) -c $< -o $@ 
 
 clean:
 		@cd libft; make clean

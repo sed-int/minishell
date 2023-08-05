@@ -40,6 +40,7 @@ void first_child(t_exec arg, t_cmd *cmd, t_list **env)
 	char **envp;
 
 	envp = make_envp(env);
+	change_heredoc(cmd);
 	if (init_redir(cmd) == 1) //open error
 		exit(1);
 	dup2(cmd->io_fd[0], STDIN_FILENO);
@@ -53,22 +54,24 @@ void first_child(t_exec arg, t_cmd *cmd, t_list **env)
 		close(cmd->io_fd[0]);
 	close(arg.fds_next[0]);
 	close(arg.fds_next[1]);
+	unlink_temp_files(cmd);
 	if (is_built_in(cmd->simple_cmd) > -1)
 	{
 		run_cmd(cmd, env, is_built_in(cmd->simple_cmd));
 		exit(error_status);
 	}
-	valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
+	if (cmd->simple_cmd[0] == NULL)
+		exit(1);
+	if (!access(cmd->simple_cmd[0], F_OK))
+		valid_cmd = cmd->simple_cmd[0];
+	else
+		valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
 	if (execve(valid_cmd, cmd->simple_cmd, envp) < 0)
 	{
-		if (cmd->simple_cmd[0])
-		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(cmd->simple_cmd[0], 2);
-			ft_putendl_fd(": command not found", 2);
-			exit(127);
-		}
-		exit(1);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd->simple_cmd[0], 2);
+		ft_putendl_fd(": command not found", 2);
+		exit(127);
 	}
 }
 
@@ -80,6 +83,7 @@ void middle_child(t_exec arg, t_cmd *cmd, t_list **env)
 	envp = make_envp(env);
 	close(arg.fds_next[0]);
 	close(arg.fds_prev[1]);
+	change_heredoc(cmd);
 	if (init_redir(cmd) == 1) // open error
 		exit(1);
 	if (cmd->io_fd[1] != 1)
@@ -99,12 +103,18 @@ void middle_child(t_exec arg, t_cmd *cmd, t_list **env)
 		close(cmd->io_fd[1]);
 	else
 		close(arg.fds_next[1]);
+	unlink_temp_files(cmd);
 	if (is_built_in(cmd->simple_cmd) > -1)
 	{
 		run_cmd(cmd, env, is_built_in(cmd->simple_cmd));
 		exit(error_status);
 	}
-	valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
+	if (cmd->simple_cmd[0] == NULL)
+		exit(1);
+	if (!access(cmd->simple_cmd[0], F_OK))
+		valid_cmd = cmd->simple_cmd[0];
+	else
+		valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
 	if (execve(valid_cmd, cmd->simple_cmd, envp) < 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
@@ -121,6 +131,7 @@ void last_child(t_exec arg, t_cmd *cmd, t_list **env)
 
 	envp = make_envp(env);
 	close(arg.fds_prev[1]);
+	change_heredoc(cmd);
 	if (init_redir(cmd) == 1) // open error
 		exit(1);
 	if (cmd->io_fd[1] != 1)
@@ -136,6 +147,7 @@ void last_child(t_exec arg, t_cmd *cmd, t_list **env)
 		close(arg.fds_prev[0]);
 	if (cmd->io_fd[1] != 1)
 		close(cmd->io_fd[1]);
+	unlink_temp_files(cmd);
 	if (is_built_in(cmd->simple_cmd) > -1)
 	{
 		run_cmd(cmd, env, is_built_in(cmd->simple_cmd));
@@ -143,7 +155,12 @@ void last_child(t_exec arg, t_cmd *cmd, t_list **env)
 	}
 	close(arg.fds_next[0]);
 	close(arg.fds_next[1]);
-	valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
+	if (cmd->simple_cmd[0] == NULL)
+		exit(1);
+	if (!access(cmd->simple_cmd[0], F_OK))
+		valid_cmd = cmd->simple_cmd[0];
+	else
+		valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
 	if (execve(valid_cmd, cmd->simple_cmd, envp) < 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
@@ -179,7 +196,6 @@ void wait_child(pid_t pid, int count)
 	}
 	return;
 }
-
 
 void	close_fd(t_exec *arg)
 {
@@ -231,4 +247,5 @@ void pipexline(t_cmd **pipeline, t_list **env)
 	}
 	close_fd(&exec);
 	wait_child(pid, exec.count);
+	// unlink_temp_files(pipeline);
 }

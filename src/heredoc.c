@@ -43,34 +43,63 @@ void	heredoc_readline(int fd, char *lim)
 	}
 }
 
-void change_heredoc(t_cmd **pipeline)
-{
-	t_cmd *iter;
-	t_token *red_iter;
-	int fd;
-	char *file_str;
+// void	unlink_temp_files(t_cmd **pipeline)
+// {
+// 	t_cmd	*cmd;
+// 	t_token	*iter;
 
-	iter = *pipeline;
+// 	cmd = *pipeline;
+// 	while (cmd)
+// 	{
+// 		iter = cmd->redir_header;
+// 		while (iter)
+// 		{
+// 			if (iter->type == D_LSR)
+// 			{
+// 				printf("%s\n", iter->content);
+// 				unlink(iter->content);
+// 			}
+// 			iter = iter->next;
+// 		}
+// 		cmd = cmd->next;
+// 	}
+// }
+
+void	unlink_temp_files(t_cmd *cmd)
+{
+	t_token	*iter;
+
+	iter = cmd->redir_header;
 	while (iter)
 	{
-		red_iter = iter->redir_header;
-		while (red_iter)
+		if (iter->type == D_LSR)
+			unlink(iter->content);
+		iter = iter->next;
+	}
+}
+
+void	change_heredoc(t_cmd *cmd)
+{
+	t_token	*iter;
+	char	*filename;
+	int		fd;
+
+	iter = cmd->redir_header;
+	while (iter)
+	{
+		if (iter->type == D_LSR)
 		{
-			if (red_iter->type == D_LSR)
+			filename = heredoc_file();
+			fd = open(filename, O_RDWR | O_CREAT, 0644);
+			if (fd == -1)
 			{
-				file_str = heredoc_file();
-				fd = open(file_str, O_RDWR | O_CREAT, 0644);
-				if (fd == -1)
-				{
-					perror("minishell: ");
-					exit(1);
-				}
-				heredoc_readline(fd, red_iter->content);
-				free(red_iter->content);
-				red_iter->content = file_str;
-				close(fd);
+				perror("minishell: ");
+				exit(1);
 			}
-			red_iter = red_iter->next;
+			heredoc_readline(fd, iter->content);
+			free(iter->content);
+			iter->content = filename;
+			close(fd);
 		}
 		iter = iter->next;
 	}
