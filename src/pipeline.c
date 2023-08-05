@@ -42,22 +42,33 @@ void first_child(t_exec arg, t_cmd *cmd, t_list **env)
 	envp = make_envp(env);
 	if (init_redir(cmd) == 1) //open error
 		exit(1);
-	close(arg.fds_next[0]);
 	dup2(cmd->io_fd[0], STDIN_FILENO);
 	if (cmd->io_fd[1] != 1)
 		dup2(cmd->io_fd[1], STDOUT_FILENO);
-	if (arg.count > 1)
+	else if (arg.count > 1)
 		dup2(arg.fds_next[1], STDOUT_FILENO);
+	if (cmd->io_fd[1] != 1)
+		close(cmd->io_fd[1]);
+	if (cmd->io_fd[0] != 0)
+		close(cmd->io_fd[0]);
 	close(arg.fds_next[0]);
 	close(arg.fds_next[1]);
-	if (run_cmd(cmd, env) == 1)
+	if (is_built_in(cmd->simple_cmd) > -1)
+	{
+		run_cmd(cmd, env, is_built_in(cmd->simple_cmd));
 		exit(error_status);
+	}
 	valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
 	if (execve(valid_cmd, cmd->simple_cmd, envp) < 0)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		perror(cmd->simple_cmd[0]);
-		exit(127);
+		if (cmd->simple_cmd[0])
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(cmd->simple_cmd[0], 2);
+			ft_putendl_fd(": command not found", 2);
+			exit(127);
+		}
+		exit(1);
 	}
 }
 
@@ -67,27 +78,38 @@ void middle_child(t_exec arg, t_cmd *cmd, t_list **env)
 	char **envp;
 
 	envp = make_envp(env);
+	close(arg.fds_next[0]);
 	close(arg.fds_prev[1]);
 	if (init_redir(cmd) == 1) // open error
 		exit(1);
 	if (cmd->io_fd[1] != 1)
 		dup2(cmd->io_fd[1], STDOUT_FILENO);
+	else
+		dup2(arg.fds_next[1], STDOUT_FILENO);
 	if (cmd->io_fd[0] != 0)
 		dup2(cmd->io_fd[0], STDIN_FILENO);
 	else
 		dup2(arg.fds_prev[0], STDIN_FILENO);
-	close(arg.fds_prev[0]);
+	// close(arg.fds_prev[0]);
 	if (cmd->io_fd[0] != 0)
 		close(cmd->io_fd[0]);
+	else
+		close(arg.fds_prev[0]);
 	if (cmd->io_fd[1] != 1)
 		close(cmd->io_fd[1]);
-	if (run_cmd(cmd, env) == 1)
+	else
+		close(arg.fds_next[1]);
+	if (is_built_in(cmd->simple_cmd) > -1)
+	{
+		run_cmd(cmd, env, is_built_in(cmd->simple_cmd));
 		exit(error_status);
+	}
 	valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
 	if (execve(valid_cmd, cmd->simple_cmd, envp) < 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
-		perror(cmd->simple_cmd[0]);
+		ft_putstr_fd(cmd->simple_cmd[0], 2);
+		ft_putendl_fd(": command not found", 2);
 		exit(127);
 	}
 }
@@ -110,15 +132,23 @@ void last_child(t_exec arg, t_cmd *cmd, t_list **env)
 	close(arg.fds_prev[0]);
 	if (cmd->io_fd[0] != 0)
 		close(cmd->io_fd[0]);
+	else
+		close(arg.fds_prev[0]);
 	if (cmd->io_fd[1] != 1)
 		close(cmd->io_fd[1]);
-	if (run_cmd(cmd, env) == 1)
+	if (is_built_in(cmd->simple_cmd) > -1)
+	{
+		run_cmd(cmd, env, is_built_in(cmd->simple_cmd));
 		exit(error_status);
+	}
+	close(arg.fds_next[0]);
+	close(arg.fds_next[1]);
 	valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
 	if (execve(valid_cmd, cmd->simple_cmd, envp) < 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
-		perror(cmd->simple_cmd[0]);
+		ft_putstr_fd(cmd->simple_cmd[0], 2);
+		ft_putendl_fd(": command not found", 2);
 		exit(127);
 	}
 }
@@ -126,12 +156,25 @@ void last_child(t_exec arg, t_cmd *cmd, t_list **env)
 void wait_child(pid_t pid, int count)
 {
 	int fork_count;
+	int	status;
 
 	fork_count = 0;
 	while (pid != 0 && fork_count < count)
 	{
-		if (waitpid(-1, 0, 0) < 0)
-			return;
+		if (waitpid(-1, &status, 0) > 0)
+		{
+			if (WIFEXITED(status))
+				error_status = WEXITSTATUS(status);
+			else if (WTERMSIG(status) == 2)
+				error_status = 130;
+			else if (WTERMSIG(status) == 3)
+			{
+				error_status = 131;
+				printf("QUIT: 3\n");
+			}
+		}
+		else
+			return ;
 		fork_count++;
 	}
 	return;
@@ -142,14 +185,17 @@ void	close_fd(t_exec *arg)
 {
 	close(arg->fds_prev[0]);
 	close(arg->fds_prev[1]);
-	close(arg->fds_next[0]);
-	close(arg->fds_next[1]);
+	if (arg->count > 0)
+	{
+		close(arg->fds_next[1]);
+		close(arg->fds_next[0]);
+	}
 }
 
 void pipexline(t_cmd **pipeline, t_list **env)
 {
-	pid_t pid;
-	t_exec exec;
+	pid_t	pid;
+	t_exec	exec;
 	t_cmd	*iter;
 
 	iter = *pipeline;
@@ -169,6 +215,7 @@ void pipexline(t_cmd **pipeline, t_list **env)
 		}
 		if (exec.repeat_fork < exec.count)
 			pipe(exec.fds_next);
+		error_status = 0;
 		pid = fork();
 		if (pid == 0 && exec.repeat_fork == 0)
 			first_child(exec, iter, env);

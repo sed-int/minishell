@@ -139,6 +139,7 @@ t_list *dup_envp(char **envp)
 	t_list	*environ;
 	int	i;
 
+	environ = NULL;
 	i = -1;
 	while (envp[++i])
 		ft_lstadd_back(&environ, ft_lstnew(ft_strdup(envp[i])));
@@ -164,7 +165,7 @@ char	*get_pwd()
 	size = 0;
 	while (spl[size])
 		size++;
-	return (ft_strjoin(spl[size - 1], " ] 🐮🦪 ] "));
+	return (ft_strjoin(spl[size - 1], " % "));
 }
 
 int	main(int ac, char **av, char **envp)
@@ -175,17 +176,13 @@ int	main(int ac, char **av, char **envp)
 	t_token	*type_list;
 	t_cmd	*pipeline;
 
-	// char *tmp[4] = {"cat", "./parshell.txt", "\0"};
-	// int pid = fork();
-	// if (pid == 0)
-	// {
-	// 	execve("/usr/bin/cat", tmp, 0);
-	// }
 	token_list = NULL;
 	type_list = NULL;
 	environ = dup_envp(envp);
-	(void) ac;
+	(void)ac;
 	(void)av;
+	signal(SIGINT, p_handler);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		input = readline(get_pwd());
@@ -194,7 +191,8 @@ int	main(int ac, char **av, char **envp)
 			ft_putendl_fd("\nexit", 1);
 			exit(1);
 		}
-		add_history(input);
+		if (*input)
+			add_history(input);
 		tokenizer(input, &token_list);
 		// ft_lstiter(token_list, list_print);
 		expand_env(&token_list, &environ);
@@ -206,14 +204,20 @@ int	main(int ac, char **av, char **envp)
 		pipeline = struct_cmd(&type_list);
 		//히어독 임시파일 모두 만들고 치환
 		change_heredoc(&pipeline);
-		// 각 프로세스에서 infile 확인, 어펜드 하는데 내가 권한 없는파일이면 에러
-		// while_pipe(&pipeline);
-		// 커맨드가 한개인지 확인, 한개라면 부모, 나머지는 자식 실행
-		// count_pipe(&pipeline);
-		
-		pipexline(&pipeline, &environ);
+		if (count_pipe(&pipeline) == 1 && is_built_in(pipeline->simple_cmd) >= 0)
+			run_cmd(pipeline, &environ, is_built_in(pipeline->simple_cmd));
+		else
+			pipexline(&pipeline, &environ);
 		ft_cmdclear(&pipeline, free);
 		ft_tokenclear(&type_list, free);
 	}
+		
 	// exit(status);
 }
+
+/**
+ * heredoc 자식 proc에서 실행 && unlink tmp file
+ * modify SIGQUIT behaviour when readline // thanks to yonghyle🥰😍😘💋
+ * if (명령어 1개 && 명령어 == built_in) 부모에서 run_cmd();
+ * norm...
+*/

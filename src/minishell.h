@@ -7,6 +7,7 @@
 # include "libft.h"
 # include <dirent.h>
 # include <fcntl.h>
+# include <signal.h>
 
 # define SYNTAX_SUCCESS	0
 # define SYNTAX_ERROR	258
@@ -97,17 +98,22 @@ void	ft_unset(char **simple_cmd, t_list **environ, int fd);
 void	ft_exit(char **simple_cmd, t_list **environ, int fd);
 void	ft_env(char **simple_cmd, t_list **environ, int fd);
 void	ft_echo(char **simple_cmd, t_list **environ, int fd);
-int		run_cmd(t_cmd *cmd, t_list **environ);
+int		is_built_in(char **simple_cmd);
+int		run_cmd(t_cmd *cmd, t_list **environ, int flag);
 t_list	*ft_getenvnode(t_list **environ, char *word);
 
 void	change_heredoc(t_cmd **pipeline);
 int		init_redir(t_cmd *cmd);
 void 	ft_exec(t_cmd **pipeline, t_list **environ);
 
-int count_pipe(t_cmd **pipeline);
-void while_pipe(t_cmd **pipeline);
-void pipexline(t_cmd **pipeline, t_list **env);
-char *valid(char **path, char *command);
+int		count_pipe(t_cmd **pipeline);
+void	while_pipe(t_cmd **pipeline);
+void	pipexline(t_cmd **pipeline, t_list **env);
+char	*valid(char **path, char *command);
+
+// signal
+void	p_handler(int sig);
+void	c_handler(int sig);
 
 #endif
 

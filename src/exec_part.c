@@ -9,7 +9,7 @@ void	ft_exec(t_cmd **pipeline, t_list **environ)
 	iter = *pipeline;
 	while (iter)
 	{
-		run_cmd(iter, environ);
+		run_cmd(iter, environ, 0);
 		iter = iter->next;
 	}
 }
