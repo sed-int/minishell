@@ -194,7 +194,6 @@ int	main(int ac, char **av, char **envp)
 		if (*input)
 			add_history(input);
 		tokenizer(input, &token_list);
-		// ft_lstiter(token_list, list_print);
 		expand_env(&token_list, &environ);
 		identify_token_type(&token_list, &type_list);
 		free(input);
@@ -202,9 +201,7 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		dequotenize(&type_list);
 		pipeline = struct_cmd(&type_list);
-		//히어독 임시파일 모두 만들고 치환
-		change_heredoc(&pipeline);
-		if (count_pipe(&pipeline) == 1 && is_built_in(pipeline->simple_cmd) >= 0)
+		if (count_pipe(&pipeline) == 1 && is_built_in(pipeline->simple_cmd) > -1)
 			run_cmd(pipeline, &environ, is_built_in(pipeline->simple_cmd));
 		else
 			pipexline(&pipeline, &environ);
@@ -217,7 +214,7 @@ int	main(int ac, char **av, char **envp)
 
 /**
  * heredoc 자식 proc에서 실행 && unlink tmp file
- * modify SIGQUIT behaviour when readline // thanks to yonghyle🥰😍😘💋
+ * modify SIGQUIT behaviour when readline // thanks to yonghyle💋
  * if (명령어 1개 && 명령어 == built_in) 부모에서 run_cmd();
  * norm...
 */

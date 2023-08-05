@@ -101,8 +101,11 @@ void	ft_echo(char **simple_cmd, t_list **environ, int fd);
 int		is_built_in(char **simple_cmd);
 int		run_cmd(t_cmd *cmd, t_list **environ, int flag);
 t_list	*ft_getenvnode(t_list **environ, char *word);
+//heredoc
+void	change_heredoc(t_cmd *cmd);
+// void	unlink_temp_files(t_cmd **pipeline);
+void	unlink_temp_files(t_cmd *cmd);
 
-void	change_heredoc(t_cmd **pipeline);
 int		init_redir(t_cmd *cmd);
 void 	ft_exec(t_cmd **pipeline, t_list **environ);
 
@@ -113,7 +116,6 @@ char	*valid(char **path, char *command);
 
 // signal
 void	p_handler(int sig);
-void	c_handler(int sig);
 
 #endif
 
