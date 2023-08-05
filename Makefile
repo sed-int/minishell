@@ -18,26 +18,28 @@ SRCDIR		=	./src
 SRC			=	dequotenizer.c main.c struct_cmd.c utils.c utils_2.c \
 				expansion.c syntax_analyzer.c tokenizer.c is_built_in.c \
 				heredoc.c exec_part.c init_redir.c count_pipe.c pipeline.c \
-				ft_cd.c ft_echo.c ft_env.c ft_exit.c ft_export.c ft_pwd.c ft_unset.c
+				ft_cd.c ft_echo.c ft_env.c ft_exit.c ft_export.c ft_pwd.c ft_unset.c \
+				handler.c
 SRC			:=	$(addprefix $(SRCDIR)/, $(SRC))
 OBJ			=	$(SRC:.c=.o)
 
 NAME		= minishell
 CC			= cc
 CFLAGS		= -Wall -Wextra -Werror
+LFLAGS		= -Llibft -lft -lreadline -lhistory -L/Users/$(USER)/.brew/opt/readline/lib -Ilibft -I/Users/$(USER)/.brew/opt/readline/include
 RM			= rm -f
 
 all:		$(NAME)
 
 $(NAME): 	$(OBJ) $(LIBFT)
-		@$(CC) -Llibft -lft -lreadline -Ilibft $(OBJ) -o $(NAME) -g -fsanitize=address
+		@$(CC) $(LFLAGS) $(OBJ) -o $(NAME) -g -fsanitize=address
 		@echo $(GREEN)"minishell made." $(EOC)
 
 $(LIBFT):
 		@make --no-print-directory -C ./libft bonus
 
 %.o: 		%.c
-		@$(CC) $(CFLAGS) -c $< -o $@ -Ilibft
+		@$(CC) $(CFLAGS) -I/Users/$(USER)/.brew/opt/readline/include -c $< -o $@ -Ilibft
 
 clean:
 		@cd libft; make clean

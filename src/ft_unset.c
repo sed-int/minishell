@@ -2,14 +2,12 @@
 
 t_list	*ft_getenvnode(t_list **environ, char *word)
 {
-	size_t	wd_len;
 	t_list	*iter;
 
 	iter = *environ;
-	wd_len = ft_strlen(word);
 	while (iter)
 	{
-		if (ft_strnstr(iter->content, word, wd_len))
+		if (!ft_strncmp(iter->content, word, ft_strlen(word)))
 			break ;
 		iter = iter->next;
 	}

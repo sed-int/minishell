@@ -28,6 +28,10 @@ void	heredoc_readline(int fd, char *lim)
 	while (1)
 	{
 		input = readline("heredoc> ");
+		if (!input)
+		{
+			return ;
+		}
 		if (!ft_strcmp(input, lim))
 		{
 			free(input);

@@ -48,7 +48,6 @@ void	print_cmd(t_cmd *pipeline)
 			ft_tokeniter(iter->redir_header, token_print);
 		iter = iter->next;
 	}
-	printf("=========================================\n");
 }
 
 char	**make_simple_cmd(t_token *word_list)
@@ -116,6 +115,5 @@ t_cmd	*struct_cmd(t_token **type_list)
 		}
 		iter = iter->next;
 	}
-	print_cmd(pipeline);
 	return (pipeline);
 }

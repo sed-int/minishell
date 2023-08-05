@@ -5,7 +5,7 @@ int	is_built_in(char **simple_cmd)
 	char	*cmd;
 
 	if (!*simple_cmd)
-		return (-1);
+		return (-2);
 	cmd = simple_cmd[0];
 	if (!ft_strcmp(cmd, "exit"))
 		return (0);
@@ -24,10 +24,10 @@ int	is_built_in(char **simple_cmd)
 	return (-1);
 }
 
-int	run_cmd(t_cmd *cmd, t_list **environ)
+int	run_cmd(t_cmd *cmd, t_list **environ, int flag)
 {
 	void	(*f[7])(char **, t_list **, int);
-	int		idx;
+	// int		idx;
 
 	f[0] = ft_exit;
 	f[1] = ft_pwd;
@@ -36,12 +36,11 @@ int	run_cmd(t_cmd *cmd, t_list **environ)
 	f[4] = ft_unset;
 	f[5] = ft_env;
 	f[6] = ft_echo;
-	idx = is_built_in(cmd->simple_cmd);
-	if (idx > -1)
+	if (flag > -1)
 	{
-		f[idx](cmd->simple_cmd, environ, 1);
+		f[flag](cmd->simple_cmd, environ, 1);
 		return (1);
 	}
 	else
-		return (0); //execve
+		return (flag); //execve
 }

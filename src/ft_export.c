@@ -20,9 +20,11 @@ char	*make_word(char *str)
 	int		i;
 
 	i = 0;
+	if (!ft_strchr(str, '='))
+		return (0);
 	while (str[i] && str[i] != '=')
 		i++;
-	ret = ft_substr(str, 0, i);
+	ret = ft_substr(str, 0, i + 1);
 	return (ret);
 }
 
@@ -31,6 +33,7 @@ int	is_valid_export_arg(char *str)
 	int	i;
 
 	i = 0;
+	
 	while (str[i])
 	{
 		if (ft_isdigit(str[0]))
@@ -55,12 +58,14 @@ void	ft_export(char **simple_cmd, t_list **environ, int fd)
 	while (simple_cmd[++i])
 	{
 		word = make_word(simple_cmd[i]);
+		if (!word)
+			continue ;
 		if (is_valid_export_arg(word))
 		{
-			tmp = ft_getenvnode(environ, simple_cmd[i]);
+			tmp = ft_getenvnode(environ, word);
 			if (tmp)
 				ft_lstdel_mid(environ, tmp);
-			ft_lstadd_back(environ, ft_lstnew(ft_strdup(simple_cmd[1])));
+			ft_lstadd_back(environ, ft_lstnew(ft_strdup(simple_cmd[i])));
 			error_status = 0;
 		}
 		else
