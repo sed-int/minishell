@@ -7,6 +7,7 @@ void	ft_exit(char **simple_cmd, t_list **environ, int fd)
 	(void)fd;
 	if (!environ)
 		return ;
+	exit_status = 0;
 	if (simple_cmd[1] && ft_atouc(simple_cmd[1], &exit_status) == 0)
 	{
 		ft_putstr_fd("minishell: exit: ", 2);

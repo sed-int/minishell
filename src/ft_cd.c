@@ -17,26 +17,35 @@ void	ft_cd(char **simple_cmd, t_list **environ, int fd)
 	char	*getcwdstr;
 
 	(void)fd;
+	error_status = 0;
 	getcwdstr = NULL;
 	if (simple_cmd[1])
 		pathname = simple_cmd[1];
 	else
+	{
 		pathname = ft_getenv(environ, "HOME");
+		if (pathname == NULL)
+		{
+			print_cd_err("HOME", "not set");
+			return ;
+		}
+	}
 	ch = chdir(pathname); // error
 	if (ch < 0)
 		print_cd_err(pathname, "No such file or directory");
 	else
 	{
-		tmp = ft_getenvnode(environ, "PWD=");
-		free(tmp->content);
 		getcwdstr = getcwd(NULL, 0);
 		if (getcwdstr == NULL)
 		{
-			perror("getcwd: ");
-			error_status = 1;
+			ft_putstr_fd("cd: error retrieving current directory: getcwd: cannot access parent ", 2);
+			perror("directories");
 			return ;
 		}
+		tmp = ft_getenvnode(environ, "PWD=");
+		if (tmp == NULL)
+			return ;
+		free(tmp->content);
 		tmp->content = ft_strjoin("PWD=", getcwdstr);
-		error_status = 0;
 	}
 }
