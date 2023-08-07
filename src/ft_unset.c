@@ -16,7 +16,7 @@ t_list	*ft_getenvnode(t_list **environ, char *word)
 	iter = *environ;
 	while (iter)
 	{
-		if (!ft_strncmp(iter->content, word, ft_strlen(word)))
+		if (!ft_strncmp(iter->content, new_word, ft_strlen(new_word)))
 			return (iter);
 		iter = iter->next;
 	}
