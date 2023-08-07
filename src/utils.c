@@ -2,7 +2,8 @@
 
 int	is_delim_in_dquote(char c)
 {
-	return (c == '<' || c == '>' || c == '\'' || c == '|' || c == '$' || c == ' ');
+	return (c == '<' || c == '>' || c == '\'' \
+		|| c == '|' || c == '$' || c == ' ');
 }
 
 int	ft_strcmp(char *s1, char *s2)
@@ -57,18 +58,18 @@ void	ft_tokenadd_back(t_token **lst, t_token *new)
 	new->prev = tmp;
 }
 
-void ft_tokendelone(t_token *lst, void (*del)(void *))
+void	ft_tokendelone(t_token *lst, void (*del)(void *))
 {
 	if (!lst || !del)
-		return;
+		return ;
 	del(lst->content);
 	free(lst);
 }
 
-void ft_tokendel_mid(t_token **lst, t_token *node)
+void	ft_tokendel_mid(t_token **lst, t_token *node)
 {
-	t_token *prev;
-	t_token *next;
+	t_token	*prev;
+	t_token	*next;
 
 	prev = node->prev;
 	next = node->next;
@@ -108,7 +109,7 @@ void	ft_tokeniter(t_token *lst, void (*f)(t_token *))
 	}
 }
 
-int		check_num(char *str)
+int	check_num(char *str)
 {
 	int	i;
 

@@ -1,10 +1,9 @@
 #include "minishell.h"
 
-
-void make_token(char *input, t_list **token_list, int token_size)
+void	make_token(char *input, t_list **token_list, int token_size)
 {
-	char *token;
-	t_list *new_token;
+	char	*token;
+	t_list	*new_token;
 
 	token = ft_substr(input, 0, token_size);
 	new_token = ft_lstnew(token);
@@ -61,6 +60,12 @@ void	expand_env(t_list **token_list, t_list **environ)
 	while (iter)
 	{
 		tmp = (char *)iter->content;
+		if (iter->prev && !ft_strcmp("<<", iter->prev->content))
+		{
+			iter = iter->next;
+			if (!iter)
+				break ;
+		}
 		iter_next = iter->next;
 		i = 0;
 		if (ft_strchr(tmp, '$'))
@@ -88,11 +93,13 @@ void	expand_env(t_list **token_list, t_list **environ)
 						{
 							exp_flag = 1;
 							expansion(iter, iter->content, &i, environ);
-							tokenizer(iter->content, &tmp_list);
+							if (!(iter->prev && (!ft_strcmp(iter->prev->content, "<") || \
+								!ft_strcmp(iter->prev->content, ">") || !ft_strcmp(iter->prev->content, ">>"))))
+								tokenizer(iter->content, &tmp_list);
 							ft_lstadd_mid(iter, &tmp_list);
 							ft_lstclear(&tmp_list, free);
 							flag = 0;
-							break;
+							break ;
 						}
 					}
 					if (exp_flag)
@@ -104,7 +111,9 @@ void	expand_env(t_list **token_list, t_list **environ)
 					{
 						exp_flag = 1;
 						expansion(iter, iter->content, &i, environ);
-						tokenizer(iter->content, &tmp_list);
+						if (!(iter->prev && (!ft_strcmp(iter->prev->content, "<") || \
+							!ft_strcmp(iter->prev->content, ">") || !ft_strcmp(iter->prev->content, ">>"))))
+							tokenizer(iter->content, &tmp_list);
 						ft_lstadd_mid(iter, &tmp_list);
 						ft_lstclear(&tmp_list, free);
 						break ;
@@ -134,10 +143,10 @@ void	token_print(t_token *node)
 	printf("token: [%s], type: %d len: %zu\n", node->content, node->type, ft_strlen(node->content));
 }
 
-t_list *dup_envp(char **envp)
+t_list	*dup_envp(char **envp)
 {
 	t_list	*environ;
-	int	i;
+	int		i;
 
 	environ = NULL;
 	i = -1;
@@ -148,12 +157,14 @@ t_list *dup_envp(char **envp)
 
 void	print_env(char **environ)
 {
-	int i = -1;
+	int	i;
+
+	i = -1;
 	while (environ[++i])
 		printf("environ : %s\n", environ[i]);
 }
 
-char	*get_pwd()
+char	*get_pwd(void)
 {
 	char	**spl;
 	char	*tmp;
@@ -170,7 +181,7 @@ char	*get_pwd()
 	return (ft_strjoin(spl[size - 1], " % "));
 }
 
-void	hello_minishell()
+void	hello_minishell(void)
 {
 	printf("              _         _         __          __    __ \n");
 	printf("   ____ ___  (_) ____  (_) _____ / /_   ___  / /   / /\n");
@@ -215,9 +226,10 @@ int	main(int ac, char **av, char **envp)
 		dequotenize(&type_list);
 		pipeline = struct_cmd(&type_list);
 		change_heredoc(&pipeline);
-		if (count_pipe(&pipeline) == 1 && is_built_in(pipeline->simple_cmd) > -1)
+		if (count_pipe(&pipeline) == 1 && \
+			is_built_in(pipeline->simple_cmd) > -1)
 		{
-			if (init_redir(pipeline) == 1) // open error
+			if (init_redir(pipeline) == 1)
 			{
 				unlink_temp_files(pipeline);
 				exit(1);
@@ -229,16 +241,4 @@ int	main(int ac, char **av, char **envp)
 		ft_cmdclear(&pipeline, free);
 		ft_tokenclear(&type_list, free);
 	}
-	//exit(error_status);
 }
-
-/**
- * heredoc 자식 proc에서 실행 && unlink tmp file
- * modify SIGQUIT behaviour when readline // thanks to yonghyle💋
- * if (명령어 1개 && 명령어 == built_in) 부모에서 run_cmd();
- * norm...
-*/
-
-/**
- * unset PATH시 런타임에러
-*/

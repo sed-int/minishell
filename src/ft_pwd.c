@@ -1,8 +1,5 @@
 #include "minishell.h"
 
-/**
- * pwd will absolutely run in child process.
-*/
 void	ft_pwd(char **simple_cmd, t_list **environ, int fd)
 {
 	char	*str;
@@ -25,8 +22,3 @@ void	ft_pwd(char **simple_cmd, t_list **environ, int fd)
 	ft_putendl_fd(str, fd);
 	free(str);
 }
-
-// int	main(int argc, char **argv)
-// {
-// 	ft_pwd(argv, 1);
-// }

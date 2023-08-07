@@ -44,8 +44,3 @@ void	ft_echo(char **simple_cmd, t_list **environ, int fd)
 	}
 	write(fd, "\n", 1);
 }
-
-// int	main(int argc, char **argv)
-// {
-// 	ft_echo(argv, 1);
-// }

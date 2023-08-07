@@ -16,7 +16,7 @@ void	ft_exit(char **simple_cmd, t_list **environ, int fd)
 		error_status = 255;
 		exit(255);
 	}
-	else if (simple_cmd[1] &&simple_cmd[2])
+	else if (simple_cmd[1] && simple_cmd[2])
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(simple_cmd[1], 2);
