@@ -24,7 +24,7 @@ int	is_built_in(char **simple_cmd)
 	return (-1);
 }
 
-int	run_cmd(t_cmd *cmd, t_list **environ, int flag)
+int	run_cmd(t_cmd *cmd, t_list **environ, int flag, int is_p)
 {
 	void	(*f[7])(char **, t_list **, int);
 	// int		idx;
@@ -38,9 +38,13 @@ int	run_cmd(t_cmd *cmd, t_list **environ, int flag)
 	f[6] = ft_echo;
 	if (flag > -1)
 	{
-		f[flag](cmd->simple_cmd, environ, 1);
+		if (is_p)
+			f[flag](cmd->simple_cmd, environ, cmd->io_fd[1]);
+		else
+			f[flag](cmd->simple_cmd, environ, 1);
 		return (1);
 	}
+
 	else
 		return (flag); //execve
 }

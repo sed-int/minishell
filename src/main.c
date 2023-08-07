@@ -202,7 +202,7 @@ int	main(int ac, char **av, char **envp)
 		if (!input)
 		{
 			ft_putendl_fd("\nexit", 1);
-			exit(1);
+			exit(0);
 		}
 		if (*input)
 			add_history(input);
@@ -216,7 +216,14 @@ int	main(int ac, char **av, char **envp)
 		pipeline = struct_cmd(&type_list);
 		change_heredoc(&pipeline);
 		if (count_pipe(&pipeline) == 1 && is_built_in(pipeline->simple_cmd) > -1)
-			run_cmd(pipeline, &environ, is_built_in(pipeline->simple_cmd));
+		{
+			if (init_redir(pipeline) == 1) // open error
+			{
+				unlink_temp_files(pipeline);
+				exit(1);
+			}
+			run_cmd(pipeline, &environ, is_built_in(pipeline->simple_cmd), 1);
+		}
 		else
 			pipexline(&pipeline, &environ);
 		ft_cmdclear(&pipeline, free);
@@ -230,4 +237,8 @@ int	main(int ac, char **av, char **envp)
  * modify SIGQUIT behaviour when readline // thanks to yonghyle💋
  * if (명령어 1개 && 명령어 == built_in) 부모에서 run_cmd();
  * norm...
+*/
+
+/**
+ * unset PATH시 런타임에러
 */

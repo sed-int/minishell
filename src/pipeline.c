@@ -62,7 +62,7 @@ void first_child(t_exec arg, t_cmd *cmd, t_list **env)
 	unlink_temp_files(cmd);
 	if (is_built_in(cmd->simple_cmd) > -1)
 	{
-		run_cmd(cmd, env, is_built_in(cmd->simple_cmd));
+		run_cmd(cmd, env, is_built_in(cmd->simple_cmd), 0);
 		exit(error_status);
 	}
 	/**
@@ -133,7 +133,7 @@ void middle_child(t_exec arg, t_cmd *cmd, t_list **env)
 	unlink_temp_files(cmd);
 	if (is_built_in(cmd->simple_cmd) > -1)
 	{
-		run_cmd(cmd, env, is_built_in(cmd->simple_cmd));
+		run_cmd(cmd, env, is_built_in(cmd->simple_cmd), 0);
 		exit(error_status);
 	}
 	if (cmd->simple_cmd[0] == NULL)
@@ -193,7 +193,7 @@ void last_child(t_exec arg, t_cmd *cmd, t_list **env)
 	unlink_temp_files(cmd);
 	if (is_built_in(cmd->simple_cmd) > -1)
 	{
-		run_cmd(cmd, env, is_built_in(cmd->simple_cmd));
+		run_cmd(cmd, env, is_built_in(cmd->simple_cmd), 0);
 		exit(error_status);
 	}
 	close(arg.fds_next[0]);

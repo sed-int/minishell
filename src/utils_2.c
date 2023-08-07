@@ -96,7 +96,7 @@ char *valid(char **path, char *command)
 	else
 	{
 		path_cmd = ft_strjoin("/", command);
-		while (path[i])
+		while (path && path[i])
 		{
 			tmp = ft_strjoin(path[i], path_cmd);
 			if (access(tmp, F_OK) > -1)

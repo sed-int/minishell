@@ -101,7 +101,7 @@ void	ft_exit(char **simple_cmd, t_list **environ, int fd);
 void	ft_env(char **simple_cmd, t_list **environ, int fd);
 void	ft_echo(char **simple_cmd, t_list **environ, int fd);
 int		is_built_in(char **simple_cmd);
-int		run_cmd(t_cmd *cmd, t_list **environ, int flag);
+int 	run_cmd(t_cmd *cmd, t_list **environ, int flag, int is_p);
 t_list	*ft_getenvnode(t_list **environ, char *word);
 //heredoc
 // void	change_heredoc(t_cmd *cmd);
