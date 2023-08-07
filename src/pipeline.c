@@ -1,4 +1,5 @@
 #include "minishell.h"
+#include <errno.h>
 
 char **make_envp(t_list **env)
 {
@@ -77,10 +78,24 @@ void first_child(t_exec arg, t_cmd *cmd, t_list **env)
 		valid_cmd = cmd->simple_cmd[0];
 	if (execve(valid_cmd, cmd->simple_cmd, envp) < 0)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd->simple_cmd[0], 2);
-		ft_putendl_fd(": command not found", 2);
-		exit(127);
+		if (valid_cmd)
+		{
+			if (access(valid_cmd, X_OK) < 0)
+			{
+				ft_putstr_fd("minishell: ", 2);
+				perror(valid_cmd);
+				exit(126);
+			}
+			else
+				exit(0);
+		}
+		else
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(cmd->simple_cmd[0], 2);
+			ft_putendl_fd(": command not found", 2);
+			exit(127);
+		}
 	}
 }
 
@@ -128,10 +143,24 @@ void middle_child(t_exec arg, t_cmd *cmd, t_list **env)
 		valid_cmd = cmd->simple_cmd[0];
 	if (execve(valid_cmd, cmd->simple_cmd, envp) < 0)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd->simple_cmd[0], 2);
-		ft_putendl_fd(": command not found", 2);
-		exit(127);
+		if (valid_cmd)
+		{
+			if (access(valid_cmd, X_OK) < 0)
+			{
+				ft_putstr_fd("minishell: ", 2);
+				perror(valid_cmd);
+				exit(126);
+			}
+			else
+				exit(0);
+		}
+		else
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(cmd->simple_cmd[0], 2);
+			ft_putendl_fd(": command not found", 2);
+			exit(127);
+		}
 	}
 }
 
@@ -176,10 +205,24 @@ void last_child(t_exec arg, t_cmd *cmd, t_list **env)
 		valid_cmd = cmd->simple_cmd[0];
 	if (execve(valid_cmd, cmd->simple_cmd, envp) < 0)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd->simple_cmd[0], 2);
-		ft_putendl_fd(": command not found", 2);
-		exit(127);
+		if (valid_cmd)
+		{
+			if (access(valid_cmd, X_OK) < 0)
+			{
+				ft_putstr_fd("minishell: ", 2);
+				perror(valid_cmd);
+				exit(126);
+			}
+			else
+				exit(0);
+		}
+		else
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(cmd->simple_cmd[0], 2);
+			ft_putendl_fd(": command not found", 2);
+			exit(127);
+		}
 	}
 }
 
