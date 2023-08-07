@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_heredoc_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jonhan <jonhan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phan <phan@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:20:38 by jonhan            #+#    #+#             */
-/*   Updated: 2023/07/19 15:34:08 by jonhan           ###   ########.fr       */
+/*   Updated: 2023/08/07 13:54:56 by phan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ void	pipex_heredoc(int argc, t_arg arg, char *argv[], char *envp[])
 		if (arg.repeat_fork < argc - 5)
 			pipe(arg.fds_next);
 		pid = fork();
+		if (pid == -1)
+			exit(1);
 		if (pid == 0 && arg.repeat_fork == 0)
 			first_child_hd(arg, argv, envp);
 		else if (pid == 0 && arg.repeat_fork == (argc - 5))
