@@ -5,16 +5,16 @@ int	is_delim(char c)
 	return (c == '$' || c == '\'' || c == '\"');
 }
 
-void	expansion(t_list *node, char *content, int *idx)
+void	expansion(t_list *node, char *content, int *idx, t_list **environ)
 {
-	t_list	*lst = NULL;
+	t_list	*lst;
 	char	*str;
 	char	*env;
 	int		key_size;
 	int		q_flag;
 	int		i;
 
-	(void)node;
+	lst = NULL;
 	i = 0;
 	q_flag = 0;
 	while (content[i])
@@ -25,18 +25,20 @@ void	expansion(t_list *node, char *content, int *idx)
 			i++;
 			while (content[i + key_size] && !is_delim(content[i + key_size]))
 			{
-				if (q_flag == '\"' && (content[i + key_size] == ' ' || content[i + key_size] == '$'))
+				if (q_flag == '\"' && (ft_is_blank(content[i + key_size]) \
+					|| content[i + key_size] == '$'))
 					break ;
 				key_size++;
 			}
 			str = ft_substr(content, i, key_size);
-			env = getenv(str);
-			free(str);
-			if (env == NULL && key_size != 0)
-				env = "";
+			env = ft_getenv(environ, str);
+			if (env == NULL && !ft_strncmp(str, "?", 1))
+				env = ft_strjoin(ft_itoa(error_status), ft_substr(str, 1, ft_strlen(str))); // 0 -> exit_status_itoa 구현, substring leak 관리
+			else if (env == NULL && key_size != 0)
+				env = ft_strdup("");
 			else if (env == NULL && key_size == 0)
-				env = "$";
-			env = ft_strdup(env);
+				env = ft_strdup("$");
+			free(str);
 			ft_lstadd_back(&lst, ft_lstnew(env));
 			i += key_size;
 		}
@@ -62,11 +64,11 @@ void	expansion(t_list *node, char *content, int *idx)
 		{
 			while (content[i + key_size]
 				&& !ft_strchr("\'\"", content[i + key_size]))
-				{
-					if (q_flag != '\'' && content[i + key_size] == '$')
-						break ;
-					key_size++;
-				}
+			{
+				if (q_flag != '\'' && content[i + key_size] == '$')
+					break ;
+				key_size++;
+			}
 			str = ft_substr(content, i, key_size);
 			ft_lstadd_back(&lst, ft_lstnew(str));
 			i += key_size;
