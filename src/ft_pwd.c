@@ -20,6 +20,8 @@ void	ft_pwd(char **simple_cmd, t_list **environ, int fd)
 	}
 	str = NULL;
 	str = getcwd(str, 0);
+	if (str == NULL)
+		str = ft_strdup(".");
 	ft_putendl_fd(str, fd);
 	free(str);
 }

@@ -40,7 +40,8 @@ void first_child(t_exec arg, t_cmd *cmd, t_list **env)
 	char **envp;
 
 	envp = make_envp(env);
-	change_heredoc(cmd);
+	// change_heredoc(cmd);
+	// change_heredoc(pipeline);
 	if (init_redir(cmd) == 1) //open error
 		exit(1);
 	dup2(cmd->io_fd[0], STDIN_FILENO);
@@ -61,7 +62,7 @@ void first_child(t_exec arg, t_cmd *cmd, t_list **env)
 		exit(error_status);
 	}
 	if (cmd->simple_cmd[0] == NULL)
-		exit(1);
+		exit(error_status);
 	if (!access(cmd->simple_cmd[0], F_OK))
 		valid_cmd = cmd->simple_cmd[0];
 	else
@@ -83,7 +84,7 @@ void middle_child(t_exec arg, t_cmd *cmd, t_list **env)
 	envp = make_envp(env);
 	close(arg.fds_next[0]);
 	close(arg.fds_prev[1]);
-	change_heredoc(cmd);
+	// change_heredoc(cmd);
 	if (init_redir(cmd) == 1) // open error
 		exit(1);
 	if (cmd->io_fd[1] != 1)
@@ -110,7 +111,7 @@ void middle_child(t_exec arg, t_cmd *cmd, t_list **env)
 		exit(error_status);
 	}
 	if (cmd->simple_cmd[0] == NULL)
-		exit(1);
+		exit(error_status);
 	if (!access(cmd->simple_cmd[0], F_OK))
 		valid_cmd = cmd->simple_cmd[0];
 	else
@@ -131,7 +132,7 @@ void last_child(t_exec arg, t_cmd *cmd, t_list **env)
 
 	envp = make_envp(env);
 	close(arg.fds_prev[1]);
-	change_heredoc(cmd);
+	// change_heredoc(cmd);
 	if (init_redir(cmd) == 1) // open error
 		exit(1);
 	if (cmd->io_fd[1] != 1)
@@ -156,7 +157,7 @@ void last_child(t_exec arg, t_cmd *cmd, t_list **env)
 	close(arg.fds_next[0]);
 	close(arg.fds_next[1]);
 	if (cmd->simple_cmd[0] == NULL)
-		exit(1);
+		exit(error_status);
 	if (!access(cmd->simple_cmd[0], F_OK))
 		valid_cmd = cmd->simple_cmd[0];
 	else
@@ -208,14 +209,35 @@ void	close_fd(t_exec *arg)
 	}
 }
 
+void fork_heredoc(t_cmd **pipeline)
+{
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		signal(SIGINT, c_handler);
+		signal(SIGTERM, c_handler);
+		signal(SIGQUIT, SIG_IGN);
+		read_heredoc(pipeline);
+	}
+	if (waitpid(-1, &status, 0) > 0)
+	{
+		error_status = WEXITSTATUS(status);
+	}
+}
+
 void pipexline(t_cmd **pipeline, t_list **env)
 {
 	pid_t	pid;
 	t_exec	exec;
 	t_cmd	*iter;
 
+	error_status = 0;
 	iter = *pipeline;
 	init_exec(&exec, pipeline, env);
+	fork_heredoc(pipeline);
 	pipe(exec.fds_prev);
 	while (exec.repeat_fork < exec.count)
 	{
@@ -231,10 +253,18 @@ void pipexline(t_cmd **pipeline, t_list **env)
 		}
 		if (exec.repeat_fork < exec.count)
 			pipe(exec.fds_next);
-		error_status = 0;
+		// error_status = 0;
+		signal(SIGINT, SIG_IGN);
 		pid = fork();
+		if (pid == 0)
+		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
+		}
 		if (pid == 0 && exec.repeat_fork == 0)
+		{
 			first_child(exec, iter, env);
+		}
 		else if (pid == 0 && exec.repeat_fork == exec.count - 1)
 			last_child(exec, iter, env);
 		else if (pid == 0)
@@ -249,3 +279,7 @@ void pipexline(t_cmd **pipeline, t_list **env)
 	wait_child(pid, exec.count);
 	// unlink_temp_files(pipeline);
 }
+
+/**
+ * syscall 실패 시 예외처리
+*/

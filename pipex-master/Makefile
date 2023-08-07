@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jonhan <jonhan@student.42.fr>              +#+  +:+       +#+         #
+#    By: phan <phan@student.42seoul.kr>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/29 15:39:58 by jonhan            #+#    #+#              #
-#    Updated: 2023/07/18 13:11:02 by jonhan           ###   ########.fr        #
+#    Updated: 2023/08/06 12:14:19 by phan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@ bonus : .MAKE_BONUS
 		touch $@
 
 %.o : %.c
-	$(CC) $(CFLAGS) -c $< -o $@ 
+	@$(CC) $(CFLAGS) -c $< -o $@ 
 
 clean : 
 	$(RM) $(RMFLAG) $(OBJS) $(OBJS_B) 

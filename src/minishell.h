@@ -12,6 +12,7 @@
 # define SYNTAX_SUCCESS	0
 # define SYNTAX_ERROR	258
 # define SYNTAX_ERROR_MSG "minishell: syntax error near unexpected token: "
+# define HEREDOC_STATUS 4242
 
 int	error_status;
 
@@ -37,6 +38,7 @@ typedef struct s_token
 {
 	enum e_type		type;
 	char			*content;
+	char			*temp;
 	struct s_token	*next;
 	struct s_token	*prev;
 }	t_token;
@@ -102,9 +104,11 @@ int		is_built_in(char **simple_cmd);
 int		run_cmd(t_cmd *cmd, t_list **environ, int flag);
 t_list	*ft_getenvnode(t_list **environ, char *word);
 //heredoc
-void	change_heredoc(t_cmd *cmd);
+// void	change_heredoc(t_cmd *cmd);
+void	change_heredoc(t_cmd **pipeline);
+void read_heredoc(t_cmd **pipeline);
 // void	unlink_temp_files(t_cmd **pipeline);
-void	unlink_temp_files(t_cmd *cmd);
+void unlink_temp_files(t_cmd *cmd);
 
 int		init_redir(t_cmd *cmd);
 void 	ft_exec(t_cmd **pipeline, t_list **environ);
@@ -114,8 +118,11 @@ void	while_pipe(t_cmd **pipeline);
 void	pipexline(t_cmd **pipeline, t_list **env);
 char	*valid(char **path, char *command);
 
+char	*get_pwd();
+
 // signal
 void	p_handler(int sig);
+void	c_handler(int sig);
 
 #endif
 
