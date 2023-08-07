@@ -1,11 +1,10 @@
 #include "minishell.h"
-#include <errno.h>
 
-char **make_envp(t_list **env)
+char	**make_envp(t_list **env)
 {
-	t_list *iter;
-	char **ret;
-	int size;
+	t_list	*iter;
+	char	**ret;
+	int		size;
 
 	iter = *env;
 	size = 0;
@@ -28,22 +27,20 @@ char **make_envp(t_list **env)
 	return (ret);
 }
 
-void init_exec(t_exec *exec, t_cmd **pipeline, t_list **env)
+void	init_exec(t_exec *exec, t_cmd **pipeline, t_list **env)
 {
 	exec->count = count_pipe(pipeline);
 	exec->repeat_fork = 0;
 	exec->path = detec_path(env);
 }
 
-void first_child(t_exec arg, t_cmd *cmd, t_list **env)
+void	first_child(t_exec arg, t_cmd *cmd, t_list **env)
 {
-	char *valid_cmd;
-	char **envp;
+	char	*valid_cmd;
+	char	**envp;
 
 	envp = make_envp(env);
-	// change_heredoc(cmd);
-	// change_heredoc(pipeline);
-	if (init_redir(cmd) == 1) // open error
+	if (init_redir(cmd) == 1)
 	{
 		unlink_temp_files(cmd);
 		exit(1);
@@ -65,14 +62,8 @@ void first_child(t_exec arg, t_cmd *cmd, t_list **env)
 		run_cmd(cmd, env, is_built_in(cmd->simple_cmd), 0);
 		exit(error_status);
 	}
-	/**
-	 * path 먼저 검사, '/' 하나라도 있을시 path 검사 안함
-	 * heredoc .tmp파일 안 없어지는 경우들
-	 * syscall fail시 예외 처리 -> fork, pipe 등
-	*/
 	if (cmd->simple_cmd[0] == NULL)
 		exit(error_status);
-
 	valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
 	if (!valid_cmd && !access(cmd->simple_cmd[0], F_OK))
 		valid_cmd = cmd->simple_cmd[0];
@@ -99,16 +90,15 @@ void first_child(t_exec arg, t_cmd *cmd, t_list **env)
 	}
 }
 
-void middle_child(t_exec arg, t_cmd *cmd, t_list **env)
+void	middle_child(t_exec arg, t_cmd *cmd, t_list **env)
 {
-	char *valid_cmd;
-	char **envp;
+	char	*valid_cmd;
+	char	**envp;
 
 	envp = make_envp(env);
 	close(arg.fds_next[0]);
 	close(arg.fds_prev[1]);
-	// change_heredoc(cmd);
-	if (init_redir(cmd) == 1) // open error
+	if (init_redir(cmd) == 1)
 	{
 		unlink_temp_files(cmd);
 		exit(1);
@@ -121,7 +111,6 @@ void middle_child(t_exec arg, t_cmd *cmd, t_list **env)
 		dup2(cmd->io_fd[0], STDIN_FILENO);
 	else
 		dup2(arg.fds_prev[0], STDIN_FILENO);
-	// close(arg.fds_prev[0]);
 	if (cmd->io_fd[0] != 0)
 		close(cmd->io_fd[0]);
 	else
@@ -164,15 +153,14 @@ void middle_child(t_exec arg, t_cmd *cmd, t_list **env)
 	}
 }
 
-void last_child(t_exec arg, t_cmd *cmd, t_list **env)
+void	last_child(t_exec arg, t_cmd *cmd, t_list **env)
 {
-	char *valid_cmd;
-	char **envp;
+	char	*valid_cmd;
+	char	**envp;
 
 	envp = make_envp(env);
 	close(arg.fds_prev[1]);
-	// change_heredoc(cmd);
-	if (init_redir(cmd) == 1) // open error
+	if (init_redir(cmd) == 1)
 	{
 		unlink_temp_files(cmd);
 		exit(1);
@@ -226,9 +214,9 @@ void last_child(t_exec arg, t_cmd *cmd, t_list **env)
 	}
 }
 
-void wait_child(pid_t pid, int count)
+void	wait_child(pid_t pid, int count)
 {
-	int fork_count;
+	int	fork_count;
 	int	status;
 
 	fork_count = 0;
@@ -250,7 +238,7 @@ void wait_child(pid_t pid, int count)
 			return ;
 		fork_count++;
 	}
-	return;
+	return ;
 }
 
 void	close_fd(t_exec *arg)
@@ -264,7 +252,7 @@ void	close_fd(t_exec *arg)
 	}
 }
 
-void fork_heredoc(t_cmd **pipeline)
+void	fork_heredoc(t_cmd **pipeline)
 {
 	pid_t	pid;
 	int		status;
@@ -286,7 +274,7 @@ void fork_heredoc(t_cmd **pipeline)
 	}
 }
 
-void pipexline(t_cmd **pipeline, t_list **env)
+void	pipexline(t_cmd **pipeline, t_list **env)
 {
 	pid_t	pid;
 	t_exec	exec;
@@ -296,6 +284,15 @@ void pipexline(t_cmd **pipeline, t_list **env)
 	iter = *pipeline;
 	init_exec(&exec, pipeline, env);
 	fork_heredoc(pipeline);
+	if (error_status != 0)
+	{
+		while (iter)
+		{
+			unlink_temp_files(iter);
+			iter = iter->next;
+		}
+		return ;
+	}
 	if (pipe(exec.fds_prev) < 0)
 		exit(1);
 	while (exec.repeat_fork < exec.count)
@@ -315,7 +312,6 @@ void pipexline(t_cmd **pipeline, t_list **env)
 			if (pipe(exec.fds_next) < 0)
 				exit(1);
 		}
-		// error_status = 0;
 		signal(SIGINT, SIG_IGN);
 		pid = fork();
 		if (pid == -1)
@@ -339,9 +335,4 @@ void pipexline(t_cmd **pipeline, t_list **env)
 	}
 	close_fd(&exec);
 	wait_child(pid, exec.count);
-	// unlink_temp_files(pipeline);
 }
-
-/**
- * syscall 실패 시 예외처리
-*/

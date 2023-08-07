@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char	*heredoc_file()
+char	*heredoc_file(void)
 {
 	int		heredoc_idx;
 	char	*tmp;
@@ -41,28 +41,6 @@ void	heredoc_readline(int fd, char *lim)
 	}
 }
 
-// void	unlink_temp_files(t_cmd **pipeline)
-// {
-// 	t_cmd	*cmd;
-// 	t_token	*iter;
-
-// 	cmd = *pipeline;
-// 	while (cmd)
-// 	{
-// 		iter = cmd->redir_header;
-// 		while (iter)
-// 		{
-// 			if (iter->type == D_LSR)
-// 			{
-// 				printf("%s\n", iter->content);
-// 				unlink(iter->content);
-// 			}
-// 			iter = iter->next;
-// 		}
-// 		cmd = cmd->next;
-// 	}
-// }
-
 void	unlink_temp_files(t_cmd *cmd)
 {
 	t_token	*iter;
@@ -76,39 +54,12 @@ void	unlink_temp_files(t_cmd *cmd)
 	}
 }
 
-// void	change_heredoc(t_cmd *cmd)
-// {
-// 	t_token	*iter;
-// 	char	*filename;
-// 	int		fd;
-
-// 	iter = cmd->redir_header;
-// 	while (iter)
-// 	{
-// 		if (iter->type == D_LSR)
-// 		{
-// 			filename = heredoc_file();
-// 			fd = open(filename, O_RDWR | O_CREAT, 0644);
-// 			if (fd == -1)
-// 			{
-// 				perror("minishell: ");
-// 				exit(1);
-// 			}
-// 			heredoc_readline(fd, iter->content);
-// 			free(iter->content);
-// 			iter->content = filename;
-// 			close(fd);
-// 		}
-// 		iter = iter->next;
-// 	}
-// }
-
-void change_heredoc(t_cmd **pipeline)
+void	change_heredoc(t_cmd **pipeline)
 {
-	t_cmd *iter;
-	t_token *red_iter;
-	char *file_str;
-	int	fd;
+	t_cmd	*iter;
+	t_token	*red_iter;
+	char	*file_str;
+	int		fd;
 
 	iter = *pipeline;
 	while (iter)
@@ -133,11 +84,11 @@ void change_heredoc(t_cmd **pipeline)
 
 void	read_heredoc(t_cmd **pipeline)
 {
-	t_cmd *iter;
-	t_token *red_iter;
-	int fd;
-	iter = *pipeline;
+	t_cmd	*iter;
+	t_token	*red_iter;
+	int		fd;
 
+	iter = *pipeline;
 	while (iter)
 	{
 		red_iter = iter->redir_header;

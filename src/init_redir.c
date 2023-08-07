@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int init_redir(t_cmd *cmd)
+int	init_redir(t_cmd *cmd)
 {
 	t_token	*redir_iter;
 	int		type;
@@ -9,7 +9,7 @@ int init_redir(t_cmd *cmd)
 	while (redir_iter)
 	{
 		type = redir_iter->type;
-		if (type == LSR || type == D_LSR) //access
+		if (type == LSR || type == D_LSR)
 		{
 			if (cmd->io_fd[0] != 0)
 				close(cmd->io_fd[0]);
@@ -21,7 +21,7 @@ int init_redir(t_cmd *cmd)
 				return (1);
 			}
 		}
-		else if (type == GRT) //create file
+		else if (type == GRT)
 		{
 			if (cmd->io_fd[1] != 1)
 				close(cmd->io_fd[1]);
@@ -33,7 +33,7 @@ int init_redir(t_cmd *cmd)
 				return (1);
 			}
 		}
-		else if (type == D_GRT) //access chmod == 000
+		else if (type == D_GRT)
 		{
 			if (cmd->io_fd[1] != 1)
 				close(cmd->io_fd[1]);
@@ -50,9 +50,9 @@ int init_redir(t_cmd *cmd)
 	return (0);
 }
 
-void while_pipe(t_cmd **pipeline)
+void	while_pipe(t_cmd **pipeline)
 {
-	t_cmd *iter;
+	t_cmd	*iter;
 
 	iter = *pipeline;
 	while (iter)

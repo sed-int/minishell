@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char *ft_token_strjoin(t_token **lst)
+char	*ft_token_strjoin(t_token **lst)
 {
 	t_token	*iter;
 	char	*res;

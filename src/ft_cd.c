@@ -30,7 +30,7 @@ void	ft_cd(char **simple_cmd, t_list **environ, int fd)
 			return ;
 		}
 	}
-	ch = chdir(pathname); // error
+	ch = chdir(pathname);
 	if (ch < 0)
 		print_cd_err(pathname, "No such file or directory");
 	else

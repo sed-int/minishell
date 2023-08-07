@@ -54,15 +54,14 @@ typedef struct s_cmd
 
 typedef struct s_exec
 {
-	int repeat_fork;
-	int count;
-	int fds_prev[2];
-	int fds_next[2];
-	char **path;
-} t_exec;
+	int		repeat_fork;
+	int		count;
+	int		fds_prev[2];
+	int		fds_next[2];
+	char	**path;
+}	t_exec;
 
-	int
-	is_delim_in_dquote(char c);
+int		is_delim_in_dquote(char c);
 void	tokenizer(char *input, t_list **token_list);
 void	list_print(void *content);
 void	make_token(char *input, t_list **token_list, int token_size);
@@ -88,9 +87,9 @@ void	ft_cmdclear(t_cmd **lst, void (*del)(void *));
 void	dequotenize(t_token **type_list);
 
 t_cmd	*struct_cmd(t_token **type_list);
-char 	**detec_path(t_list **environ);
+char	**detec_path(t_list **environ);
 
-	void token_print(t_token *node); // to delete
+void	token_print(t_token *node);
 
 //built-in
 void	ft_export(char **simple_cmd, t_list **environ, int fd);
@@ -101,29 +100,27 @@ void	ft_exit(char **simple_cmd, t_list **environ, int fd);
 void	ft_env(char **simple_cmd, t_list **environ, int fd);
 void	ft_echo(char **simple_cmd, t_list **environ, int fd);
 int		is_built_in(char **simple_cmd);
-int 	run_cmd(t_cmd *cmd, t_list **environ, int flag, int is_p);
+int		run_cmd(t_cmd *cmd, t_list **environ, int flag, int is_p);
 t_list	*ft_getenvnode(t_list **environ, char *word);
 //heredoc
 // void	change_heredoc(t_cmd *cmd);
 void	change_heredoc(t_cmd **pipeline);
-void read_heredoc(t_cmd **pipeline);
+void	read_heredoc(t_cmd **pipeline);
 // void	unlink_temp_files(t_cmd **pipeline);
-void unlink_temp_files(t_cmd *cmd);
+void	unlink_temp_files(t_cmd *cmd);
 
 int		init_redir(t_cmd *cmd);
-void 	ft_exec(t_cmd **pipeline, t_list **environ);
+void	ft_exec(t_cmd **pipeline, t_list **environ);
 
 int		count_pipe(t_cmd **pipeline);
 void	while_pipe(t_cmd **pipeline);
 void	pipexline(t_cmd **pipeline, t_list **env);
 char	*valid(char **path, char *command);
 
-char	*get_pwd();
+char	*get_pwd(void);
 
 // signal
 void	p_handler(int sig);
 void	c_handler(int sig);
 
 #endif
-
-

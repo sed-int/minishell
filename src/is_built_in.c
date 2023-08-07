@@ -27,7 +27,6 @@ int	is_built_in(char **simple_cmd)
 int	run_cmd(t_cmd *cmd, t_list **environ, int flag, int is_p)
 {
 	void	(*f[7])(char **, t_list **, int);
-	// int		idx;
 
 	f[0] = ft_exit;
 	f[1] = ft_pwd;
@@ -44,7 +43,6 @@ int	run_cmd(t_cmd *cmd, t_list **environ, int flag, int is_p)
 			f[flag](cmd->simple_cmd, environ, 1);
 		return (1);
 	}
-
 	else
-		return (flag); //execve
+		return (flag);
 }

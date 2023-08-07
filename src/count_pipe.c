@@ -2,8 +2,8 @@
 
 int	count_pipe(t_cmd **pipeline)
 {
-	t_cmd *iter;
-	int	cnt;
+	t_cmd	*iter;
+	int		cnt;
 
 	cnt = 0;
 	iter = *pipeline;

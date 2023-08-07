@@ -80,11 +80,3 @@ void	ft_export(char **simple_cmd, t_list **environ, int fd)
 		free(word);
 	}
 }
-
-/**
- * 1. no '=' in simple_cmd[1]
- * 2. starts with number -> "bash: export: `1=value': not a valid identifier"
- * 3. contains " \?!$" in key -> "bash: export: `key!=value': not a valid identifier"
- * 4. no key -> "bash: export: `=value': not a valid identifier"
- * export can take multiple arguments
-*/
