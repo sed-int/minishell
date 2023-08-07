@@ -42,8 +42,11 @@ void first_child(t_exec arg, t_cmd *cmd, t_list **env)
 	envp = make_envp(env);
 	// change_heredoc(cmd);
 	// change_heredoc(pipeline);
-	if (init_redir(cmd) == 1) //open error
+	if (init_redir(cmd) == 1) // open error
+	{
+		unlink_temp_files(cmd);
 		exit(1);
+	}
 	dup2(cmd->io_fd[0], STDIN_FILENO);
 	if (cmd->io_fd[1] != 1)
 		dup2(cmd->io_fd[1], STDOUT_FILENO);
@@ -91,7 +94,10 @@ void middle_child(t_exec arg, t_cmd *cmd, t_list **env)
 	close(arg.fds_prev[1]);
 	// change_heredoc(cmd);
 	if (init_redir(cmd) == 1) // open error
+	{
+		unlink_temp_files(cmd);
 		exit(1);
+	}
 	if (cmd->io_fd[1] != 1)
 		dup2(cmd->io_fd[1], STDOUT_FILENO);
 	else
@@ -138,7 +144,10 @@ void last_child(t_exec arg, t_cmd *cmd, t_list **env)
 	close(arg.fds_prev[1]);
 	// change_heredoc(cmd);
 	if (init_redir(cmd) == 1) // open error
+	{
+		unlink_temp_files(cmd);
 		exit(1);
+	}
 	if (cmd->io_fd[1] != 1)
 		dup2(cmd->io_fd[1], STDOUT_FILENO);
 	if (cmd->io_fd[0] != 0)
@@ -217,6 +226,7 @@ void fork_heredoc(t_cmd **pipeline)
 	pid_t	pid;
 	int		status;
 
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
 		exit(1);

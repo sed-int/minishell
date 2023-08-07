@@ -20,7 +20,10 @@ void	p_handler(int sig)
 void	c_handler(int sig)
 {
 	if (sig == SIGINT)
+	{
+		printf("\n");
 		exit(1);
+	}
 	else if (sig == SIGTERM)
 		exit(0);
 }
