@@ -61,12 +61,17 @@ void first_child(t_exec arg, t_cmd *cmd, t_list **env)
 		run_cmd(cmd, env, is_built_in(cmd->simple_cmd));
 		exit(error_status);
 	}
+	/**
+	 * path 먼저 검사, '/' 하나라도 있을시 path 검사 안함
+	 * heredoc .tmp파일 안 없어지는 경우들
+	 * syscall fail시 예외 처리 -> fork, pipe 등
+	*/
 	if (cmd->simple_cmd[0] == NULL)
 		exit(error_status);
-	if (!access(cmd->simple_cmd[0], F_OK))
+
+	valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
+	if (!valid_cmd && !access(cmd->simple_cmd[0], F_OK))
 		valid_cmd = cmd->simple_cmd[0];
-	else
-		valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
 	if (execve(valid_cmd, cmd->simple_cmd, envp) < 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
@@ -112,10 +117,9 @@ void middle_child(t_exec arg, t_cmd *cmd, t_list **env)
 	}
 	if (cmd->simple_cmd[0] == NULL)
 		exit(error_status);
-	if (!access(cmd->simple_cmd[0], F_OK))
+	valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
+	if (!valid_cmd && !access(cmd->simple_cmd[0], F_OK))
 		valid_cmd = cmd->simple_cmd[0];
-	else
-		valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
 	if (execve(valid_cmd, cmd->simple_cmd, envp) < 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
@@ -158,10 +162,9 @@ void last_child(t_exec arg, t_cmd *cmd, t_list **env)
 	close(arg.fds_next[1]);
 	if (cmd->simple_cmd[0] == NULL)
 		exit(error_status);
-	if (!access(cmd->simple_cmd[0], F_OK))
+	valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
+	if (!valid_cmd && !access(cmd->simple_cmd[0], F_OK))
 		valid_cmd = cmd->simple_cmd[0];
-	else
-		valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
 	if (execve(valid_cmd, cmd->simple_cmd, envp) < 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
@@ -215,6 +218,8 @@ void fork_heredoc(t_cmd **pipeline)
 	int		status;
 
 	pid = fork();
+	if (pid == -1)
+		exit(1);
 	if (pid == 0)
 	{
 		signal(SIGINT, c_handler);
@@ -238,7 +243,8 @@ void pipexline(t_cmd **pipeline, t_list **env)
 	iter = *pipeline;
 	init_exec(&exec, pipeline, env);
 	fork_heredoc(pipeline);
-	pipe(exec.fds_prev);
+	if (pipe(exec.fds_prev) < 0)
+		exit(1);
 	while (exec.repeat_fork < exec.count)
 	{
 		if (exec.repeat_fork > 1)
@@ -252,19 +258,22 @@ void pipexline(t_cmd **pipeline, t_list **env)
 			exec.fds_prev[1] = exec.fds_next[1];
 		}
 		if (exec.repeat_fork < exec.count)
-			pipe(exec.fds_next);
+		{
+			if (pipe(exec.fds_next) < 0)
+				exit(1);
+		}
 		// error_status = 0;
 		signal(SIGINT, SIG_IGN);
 		pid = fork();
+		if (pid == -1)
+			exit(1);
 		if (pid == 0)
 		{
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
 		}
 		if (pid == 0 && exec.repeat_fork == 0)
-		{
 			first_child(exec, iter, env);
-		}
 		else if (pid == 0 && exec.repeat_fork == exec.count - 1)
 			last_child(exec, iter, env);
 		else if (pid == 0)

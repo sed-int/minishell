@@ -88,17 +88,25 @@ char *valid(char **path, char *command)
 	int	i;
 
 	i = 0;
-	path_cmd = ft_strjoin("/", command);
-	while (path[i])
+	if (ft_strchr(command, '/'))
 	{
-		tmp = ft_strjoin(path[i], path_cmd);
-		if (access(tmp, F_OK) > -1)
+		path_cmd = ft_strdup(command);
+		return (path_cmd);
+	}
+	else
+	{
+		path_cmd = ft_strjoin("/", command);
+		while (path[i])
 		{
-			free(path_cmd);
-			return (tmp);
+			tmp = ft_strjoin(path[i], path_cmd);
+			if (access(tmp, F_OK) > -1)
+			{
+				free(path_cmd);
+				return (tmp);
+			}
+			free(tmp);
+			i++;
 		}
-		free(tmp);
-		i++;
 	}
 	free(path_cmd);
 	return (NULL);
