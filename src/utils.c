@@ -32,6 +32,7 @@ t_token	*ft_token_new(int type, void *content)
 		return (0);
 	tmp->type = type;
 	tmp->content = content;
+	tmp->temp = NULL;
 	tmp->next = NULL;
 	tmp->prev = NULL;
 	return (tmp);

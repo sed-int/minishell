@@ -27,3 +27,4 @@ void	ft_exit(char **simple_cmd, t_list **environ, int fd)
 	error_status = exit_status;
 	exit(exit_status);
 }
+

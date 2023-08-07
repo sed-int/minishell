@@ -70,8 +70,10 @@ char **detec_path(t_list **environ)
 	char	**res;
 
 	iter = *environ;
+	res = NULL;
 	while (iter)
 	{
+		// printf("iter");
 		if (!ft_strncmp(iter->content, "PATH=", 5))
 			res = ft_split((iter->content) + 5, ':');
 		iter = iter->next;

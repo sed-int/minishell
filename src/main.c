@@ -160,12 +160,24 @@ char	*get_pwd()
 	int		size;
 
 	tmp = getcwd(NULL, 0);
+	if (tmp == NULL)
+		return (". % ");
 	spl = ft_split(tmp, '/');
 	free(tmp);
 	size = 0;
 	while (spl[size])
 		size++;
 	return (ft_strjoin(spl[size - 1], " % "));
+}
+
+void	hello_minishell()
+{
+	printf("              _         _         __          __    __ \n");
+	printf("   ____ ___  (_) ____  (_) _____ / /_   ___  / /   / /\n");
+	printf("  / __ `__ \\/ / / __ \\/ / / ___// __ \\ / _ \\/ /   / /\n");
+	printf(" / / / / / / / / / / / / (__  )/ / / /( ___/ /___/ /___\n");
+	printf("/_/ /_/ /_/_/ /_/ /_/_/ /____//_/ /_/ \\___/_____/_____/\n");
+	printf("                    ver.1  @phan @jonhan @hcho2 @junssong\n");
 }
 
 int	main(int ac, char **av, char **envp)
@@ -181,10 +193,11 @@ int	main(int ac, char **av, char **envp)
 	environ = dup_envp(envp);
 	(void)ac;
 	(void)av;
-	signal(SIGINT, p_handler);
-	signal(SIGQUIT, SIG_IGN);
+	hello_minishell();
 	while (1)
 	{
+		signal(SIGINT, p_handler);
+		signal(SIGQUIT, SIG_IGN);
 		input = readline(get_pwd());
 		if (!input)
 		{
@@ -201,6 +214,7 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		dequotenize(&type_list);
 		pipeline = struct_cmd(&type_list);
+		change_heredoc(&pipeline);
 		if (count_pipe(&pipeline) == 1 && is_built_in(pipeline->simple_cmd) > -1)
 			run_cmd(pipeline, &environ, is_built_in(pipeline->simple_cmd));
 		else
