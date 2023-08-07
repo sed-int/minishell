@@ -10,7 +10,8 @@ void	ft_env(char **simple_cmd, t_list **environ, int fd)
 	iter = *environ;
 	while (iter)
 	{
-		ft_putendl_fd(iter->content, fd);
+		if (ft_strchr(iter->content, '='))
+			ft_putendl_fd(iter->content, fd);
 		iter = iter->next;
 	}
 }
