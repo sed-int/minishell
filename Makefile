@@ -40,7 +40,7 @@ $(LIBFT):
 		@make --no-print-directory -C ./libft bonus
 
 %.o: 		%.c
-		@$(CC) $(CFLAGS) $(LIBFLAGS) $(LDFLAGS) -c $< -o $@ 
+		@$(CC) $(CFLAGS) $(LIBFLAGS) $(LDFLAGS) -c $< -o $@
 
 clean:
 		@cd libft; make clean

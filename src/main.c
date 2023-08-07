@@ -222,8 +222,7 @@ int	main(int ac, char **av, char **envp)
 		ft_cmdclear(&pipeline, free);
 		ft_tokenclear(&type_list, free);
 	}
-		
-	// exit(status);
+	//exit(error_status);
 }
 
 /**
