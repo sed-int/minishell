@@ -42,7 +42,7 @@ void	ft_cd(char **simple_cmd, t_list **environ, int fd)
 			perror("directories");
 			return ;
 		}
-		tmp = ft_getenvnode(environ, "PWD=");
+		tmp = ft_getenvnode(environ, "PWD");
 		if (tmp == NULL)
 			return ;
 		free(tmp->content);
