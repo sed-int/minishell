@@ -1,11 +1,5 @@
 #include "minishell.h"
 
-int	is_invalid_key(int c)
-{
-	return (c == '!' || c == ' ' || c == '\\'
-		|| c == '?' || c == '\'' || c == '\"');
-}
-
 int	print_export_err(char *str)
 {
 	ft_putstr_fd("minishell: export: \'", 2);

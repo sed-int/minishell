@@ -29,27 +29,6 @@ void	redir_type(t_token **type_list, t_token *node)
 	ft_tokendel_mid(type_list, node->next);
 }
 
-void	print_cmd(t_cmd *pipeline)
-{
-	t_cmd	*iter;
-	char	**tmp;
-
-	iter = pipeline;
-	while (iter)
-	{
-		tmp = iter->simple_cmd;
-		while (*tmp)
-		{
-			printf("token : %s ", *tmp);
-			tmp++;
-		}
-		printf("\n");
-		if (iter->redir_header)
-			ft_tokeniter(iter->redir_header, token_print);
-		iter = iter->next;
-	}
-}
-
 char	**make_simple_cmd(t_token *word_list)
 {
 	t_token	*iter;

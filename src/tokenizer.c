@@ -5,6 +5,18 @@ int	ft_is_blank(int c)
 	return (c == ' ' || c == '\t');
 }
 
+void	make_token(char *input, t_list **token_list, int token_size)
+{
+	char	*token;
+	t_list	*new_token;
+
+	token = ft_substr(input, 0, token_size);
+	new_token = ft_lstnew(token);
+	if (new_token == NULL)
+		exit(1);
+	ft_lstadd_back(token_list, new_token);
+}
+
 void	tokenizer(char *input, t_list **token_list)
 {
 	int		token_size;

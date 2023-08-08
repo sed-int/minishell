@@ -24,7 +24,6 @@ void	ft_exit(char **simple_cmd, t_list **environ, int fd)
 		error_status = 255;
 		exit(255);
 	}
-	ft_putendl_fd("exit", 1);
 	error_status = exit_status;
 	exit(exit_status);
 }
