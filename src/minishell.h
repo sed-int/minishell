@@ -14,7 +14,7 @@
 # define SYNTAX_ERROR_MSG "minishell: syntax error near unexpected token: "
 # define HEREDOC_STATUS 4242
 
-int	error_status;
+int	g_error_status;
 
 enum	e_type
 {

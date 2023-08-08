@@ -34,10 +34,7 @@ char	*valid(char **path, char *command)
 
 	i = 0;
 	if (ft_strchr(command, '/'))
-	{
-		path_cmd = ft_strdup(command);
-		return (path_cmd);
-	}
+		return (ft_strdup(command));
 	else
 	{
 		path_cmd = ft_strjoin("/", command);

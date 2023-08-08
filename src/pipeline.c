@@ -60,10 +60,10 @@ void	first_child(t_exec arg, t_cmd *cmd, t_list **env)
 	if (is_built_in(cmd->simple_cmd) > -1)
 	{
 		run_cmd(cmd, env, is_built_in(cmd->simple_cmd), 0);
-		exit(error_status);
+		exit(g_error_status);
 	}
 	if (cmd->simple_cmd[0] == NULL)
-		exit(error_status);
+		exit(g_error_status);
 	valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
 	if (!valid_cmd && !access(cmd->simple_cmd[0], F_OK))
 		valid_cmd = cmd->simple_cmd[0];
@@ -123,10 +123,10 @@ void	middle_child(t_exec arg, t_cmd *cmd, t_list **env)
 	if (is_built_in(cmd->simple_cmd) > -1)
 	{
 		run_cmd(cmd, env, is_built_in(cmd->simple_cmd), 0);
-		exit(error_status);
+		exit(g_error_status);
 	}
 	if (cmd->simple_cmd[0] == NULL)
-		exit(error_status);
+		exit(g_error_status);
 	valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
 	if (!valid_cmd && !access(cmd->simple_cmd[0], F_OK))
 		valid_cmd = cmd->simple_cmd[0];
@@ -182,12 +182,12 @@ void	last_child(t_exec arg, t_cmd *cmd, t_list **env)
 	if (is_built_in(cmd->simple_cmd) > -1)
 	{
 		run_cmd(cmd, env, is_built_in(cmd->simple_cmd), 0);
-		exit(error_status);
+		exit(g_error_status);
 	}
 	close(arg.fds_next[0]);
 	close(arg.fds_next[1]);
 	if (cmd->simple_cmd[0] == NULL)
-		exit(error_status);
+		exit(g_error_status);
 	valid_cmd = valid(arg.path, cmd->simple_cmd[0]);
 	if (!valid_cmd && !access(cmd->simple_cmd[0], F_OK))
 		valid_cmd = cmd->simple_cmd[0];
@@ -225,12 +225,12 @@ void	wait_child(pid_t pid, int count)
 		if (waitpid(-1, &status, 0) > 0)
 		{
 			if (WIFEXITED(status))
-				error_status = WEXITSTATUS(status);
+				g_error_status = WEXITSTATUS(status);
 			else if (WTERMSIG(status) == 2)
-				error_status = 130;
+				g_error_status = 130;
 			else if (WTERMSIG(status) == 3)
 			{
-				error_status = 131;
+				g_error_status = 131;
 				printf("QUIT: 3\n");
 			}
 		}
@@ -270,7 +270,7 @@ void	fork_heredoc(t_cmd **pipeline)
 	}
 	if (waitpid(-1, &status, 0) > 0)
 	{
-		error_status = WEXITSTATUS(status);
+		g_error_status = WEXITSTATUS(status);
 	}
 }
 
@@ -280,11 +280,11 @@ void	pipexline(t_cmd **pipeline, t_list **env)
 	t_exec	exec;
 	t_cmd	*iter;
 
-	error_status = 0;
+	g_error_status = 0;
 	iter = *pipeline;
 	init_exec(&exec, pipeline, env);
 	fork_heredoc(pipeline);
-	if (error_status != 0)
+	if (g_error_status != 0)
 	{
 		while (iter)
 		{

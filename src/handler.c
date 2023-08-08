@@ -10,7 +10,7 @@ void	p_handler(int sig)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	error_status = 1;
+	g_error_status = 1;
 }
 
 void	c_handler(int sig)

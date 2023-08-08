@@ -19,7 +19,7 @@ void	ft_echo(char **simple_cmd, t_list **environ, int fd)
 {
 	int	i;
 
-	error_status = 0;
+	g_error_status = 0;
 	if (simple_cmd[1] != NULL && !ft_strcmp("-n", simple_cmd[1]))
 	{
 		i = check_more_newline(simple_cmd);

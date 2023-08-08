@@ -52,7 +52,7 @@ void	expansion(t_list *node, char *content, int *idx, t_list **environ)
 			str = ft_substr(content, i, key_size);
 			env = ft_getenv(environ, str);
 			if (env == NULL && !ft_strncmp(str, "?", 1))
-				env = ft_strjoin(ft_itoa(error_status), \
+				env = ft_strjoin(ft_itoa(g_error_status), \
 					ft_substr(str, 1, ft_strlen(str)));
 			else if (env == NULL && key_size != 0)
 				env = ft_strdup("");

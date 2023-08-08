@@ -6,7 +6,7 @@ void	print_cd_err(char *path, char *str)
 	ft_putstr_fd(path, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putendl_fd(str, 2);
-	error_status = 1;
+	g_error_status = 1;
 }
 
 char	*check_path(char *word, t_list **environ)
@@ -50,7 +50,7 @@ void	ft_cd(char **simple_cmd, t_list **environ, int fd)
 
 	(void)fd;
 	cwd = NULL;
-	error_status = 0;
+	g_error_status = 0;
 	pathname = check_path(simple_cmd[1], environ);
 	if (!pathname)
 		return ;

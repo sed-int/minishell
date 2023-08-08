@@ -49,7 +49,7 @@ void	print_export(t_list **environ, int fd)
 		ft_putendl_fd(iter->content, fd);
 		iter = iter->next;
 	}
-	error_status = 0;
+	g_error_status = 0;
 }
 
 void	ft_export(char **simple_cmd, t_list **environ, int fd)
@@ -73,10 +73,10 @@ void	ft_export(char **simple_cmd, t_list **environ, int fd)
 			if (tmp)
 				ft_lstdel_mid(environ, tmp);
 			ft_lstadd_back(environ, ft_lstnew(ft_strdup(simple_cmd[i])));
-			error_status = 0;
+			g_error_status = 0;
 		}
 		else
-			error_status = 1;
+			g_error_status = 1;
 		free(word);
 	}
 }
