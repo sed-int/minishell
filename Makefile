@@ -17,11 +17,11 @@ LIBFT		=	./libft/libft.a
 SRCDIR		=	./src
 SRC			=	dequotenizer.c main.c struct_cmd.c \
 				expansion.c syntax_analyzer.c tokenizer.c is_built_in.c \
-				heredoc.c init_redir.c count_pipe.c pipeline.c \
+				init_redir.c count_pipe.c pipeline.c \
 				ft_cd.c ft_echo.c ft_env.c ft_exit.c ft_export.c ft_pwd.c ft_unset.c \
-				handler.c \
+				handler.c heredoc.c heredoc_util.c \
 				utils.c utils_2.c utils_3.c utils_4.c
-				
+
 SRC			:=	$(addprefix $(SRCDIR)/, $(SRC))
 OBJ			=	$(SRC:.c=.o)
 

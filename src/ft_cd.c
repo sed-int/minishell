@@ -24,9 +24,10 @@ char	*check_path(char *word, t_list **environ)
 			return (NULL);
 		}
 	}
+	return (pathname);
 }
 
-int	check_cwd(void)
+char	*check_cwd(void)
 {
 	char	*cwd;
 
@@ -35,9 +36,9 @@ int	check_cwd(void)
 	{
 		perror("cd: error retrieving current directory: \
 			 getcwd: cannot access parent ");
-		return (0);
+		return (NULL);
 	}
-	return (1);
+	return (cwd);
 }
 
 void	ft_cd(char **simple_cmd, t_list **environ, int fd)
@@ -45,8 +46,10 @@ void	ft_cd(char **simple_cmd, t_list **environ, int fd)
 	char	*pathname;
 	int		ch;
 	t_list	*tmp;
+	char	*cwd;
 
 	(void)fd;
+	cwd = NULL;
 	error_status = 0;
 	pathname = check_path(simple_cmd[1], environ);
 	if (!pathname)
@@ -56,12 +59,13 @@ void	ft_cd(char **simple_cmd, t_list **environ, int fd)
 		print_cd_err(pathname, "No such file or directory");
 	else
 	{
-		if (!check_cwd())
+		cwd = check_cwd();
+		if (!cwd)
 			return ;
 		tmp = ft_getenvnode(environ, "PWD");
 		if (tmp == NULL)
 			return ;
 		free(tmp->content);
-		tmp->content = ft_strjoin("PWD=", getcwdstr);
+		tmp->content = ft_strjoin("PWD=", cwd);
 	}
 }

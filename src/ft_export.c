@@ -39,6 +39,19 @@ int	is_valid_export_arg(char *str)
 	return (1);
 }
 
+void	print_export(t_list **environ, int fd)
+{
+	t_list	*iter;
+
+	iter = *environ;
+	while (iter)
+	{
+		ft_putendl_fd(iter->content, fd);
+		iter = iter->next;
+	}
+	error_status = 0;
+}
+
 void	ft_export(char **simple_cmd, t_list **environ, int fd)
 {
 	int		i;
@@ -46,15 +59,8 @@ void	ft_export(char **simple_cmd, t_list **environ, int fd)
 	t_list	*tmp;
 
 	(void)fd;
-	if (simple_cmd[1] == 0)
-	{
-		tmp = *environ;
-		while (tmp)
-		{
-			ft_putendl_fd(tmp->content, fd);
-			tmp = tmp->next;
-		}
-	}
+	if (!simple_cmd[1])
+		print_export(environ, fd);
 	i = 0;
 	while (simple_cmd[++i])
 	{
