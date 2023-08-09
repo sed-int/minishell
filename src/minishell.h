@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/09 20:47:35 by hcho2             #+#    #+#             */
+/*   Updated: 2023/08/09 20:47:36 by hcho2            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -63,9 +75,14 @@ typedef struct s_exec
 
 /* tokenize */
 int		is_delim_in_dquote(char c);
-void	tokenizer(char *input, t_list **token_list);
-void	list_print(void *content);
+int		tokenizer(char *input, t_list **token_list);
 void	make_token(char *input, t_list **token_list, int token_size);
+void	check_pipe(int *token_size, char **input, t_list **token_list);
+void	check_lsr_grt(int *token_size, char **input, t_list **token_list);
+int		check_quto(int *flag, int *token_size, char **input);
+void	check_quote_2(char *word, int i, int q_flag, char *wd_flag);
+int		help_tokenizer(char **input, int *token_size, \
+						int *flag, t_list **token_list);
 
 /* expand */
 void	expand_env(t_list **token_list, t_list **environ);
@@ -90,7 +107,6 @@ void	ft_tokenclear(t_token **lst, void (*del)(void *));
 void	ft_tokeniter(t_token *lst, void (*f)(t_token *));
 void	ft_tokendel_mid(t_token **lst, t_token *node);
 int		ft_error(t_token **type_list, char *content);
-int		ft_is_blank(int c);
 int		ft_atouc(char *str, unsigned char *num);
 char	*ft_getenv(t_list **environ, char *word);
 t_cmd	*ft_cmd_new(void);
@@ -99,6 +115,8 @@ void	ft_cmdclear(t_cmd **lst, void (*del)(void *));
 void	dequotenize(t_token **type_list);
 t_cmd	*struct_cmd(t_token **type_list);
 char	**detec_path(t_list **environ);
+int		ft_is_blank(int c);
+void	print_minishell(void);
 
 /* built_in */
 void	ft_export(char **simple_cmd, t_list **environ, int fd);
@@ -122,6 +140,18 @@ int		init_redir(t_cmd *cmd);
 void	ft_exec(t_cmd **pipeline, t_list **environ);
 int		count_pipe(t_cmd **pipeline);
 void	pipexline(t_cmd **pipeline, t_list **env);
+char	**make_envp(t_list **env);
+void	init_exec(t_exec *exec, t_cmd **pipeline, t_list **env);
+void	wait_child(pid_t pid, int count);
+void	close_fd(t_exec *arg);
+void	fork_heredoc(t_cmd **pipeline);
+void	first_child(t_exec arg, t_cmd *cmd, t_list **env);
+void	first_child_help(t_exec *arg, t_cmd *cmd);
+void	middle_child(t_exec arg, t_cmd *cmd, t_list **env);
+void	middle_child_help(t_exec *arg, t_cmd *cmd);
+void	last_child(t_exec arg, t_cmd *cmd, t_list **env);
+void	last_child_help(t_exec *arg, t_cmd *cmd);
+void	ft_execve(t_exec arg, t_cmd *cmd, char **envp);
 char	*valid(char **path, char *command);
 char	*get_pwd(void);
 

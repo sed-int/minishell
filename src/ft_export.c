@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/09 20:47:59 by hcho2             #+#    #+#             */
+/*   Updated: 2023/08/09 20:48:00 by hcho2            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	print_export_err(char *str)
@@ -25,7 +37,6 @@ int	is_valid_export_arg(char *str)
 	int	i;
 
 	i = 0;
-
 	if (str[0] && ft_isdigit(str[0]))
 		return (print_export_err(str));
 	while (str[i])

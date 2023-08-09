@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dequotenizer.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/09 20:48:19 by hcho2             #+#    #+#             */
+/*   Updated: 2023/08/09 20:48:19 by hcho2            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*modify_word(char *word, char *wd_flag, int wd_len)
@@ -7,15 +19,16 @@ char	*modify_word(char *word, char *wd_flag, int wd_len)
 	int		j;
 	int		res_len;
 
-	i = 0;
+	i = -1;
 	res_len = 0;
-	while (i < wd_len)
+	while (++i < wd_len)
 	{
 		if (wd_flag[i] != 1)
 			res_len++;
-		i++;
 	}
 	res = (char *)malloc(res_len + 1);
+	if (!res)
+		exit(1);
 	i = 0;
 	j = 0;
 	while (i < wd_len && j < res_len)
@@ -26,6 +39,28 @@ char	*modify_word(char *word, char *wd_flag, int wd_len)
 	}
 	res[j] = '\0';
 	return (res);
+}
+
+void	check_quote_2(char *word, int i, int q_flag, char *wd_flag)
+{
+	if (word[i] && word[i] == '\"')
+	{
+		if (q_flag != '\'')
+			wd_flag[i] = 1;
+		if (q_flag == 0)
+			q_flag = '\"';
+		else if (q_flag == '\"')
+			q_flag = 0;
+	}
+	else if (word[i] && word[i] == '\'')
+	{
+		if (q_flag != '\"')
+			wd_flag[i] = 1;
+		if (q_flag == 0)
+			q_flag = '\'';
+		else if (q_flag == '\'')
+			q_flag = 0;
+	}
 }
 
 void	dequotenize(t_token **type_list)
@@ -45,24 +80,7 @@ void	dequotenize(t_token **type_list)
 		i = 0;
 		while (word[i])
 		{
-			if (word[i] && word[i] == '\"')
-			{
-				if (q_flag != '\'')
-					wd_flag[i] = 1;
-				if (q_flag == 0)
-					q_flag = '\"';
-				else if (q_flag == '\"')
-					q_flag = 0;
-			}
-			else if (word[i] && word[i] == '\'')
-			{
-				if (q_flag != '\"')
-					wd_flag[i] = 1;
-				if (q_flag == 0)
-					q_flag = '\'';
-				else if (q_flag == '\'')
-					q_flag = 0;
-			}
+			check_quote_2(word, i, q_flag, wd_flag);
 			i++;
 		}
 		iter->content = modify_word(word, wd_flag, ft_strlen(word));

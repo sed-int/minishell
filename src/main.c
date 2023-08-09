@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/09 20:49:04 by hcho2             #+#    #+#             */
+/*   Updated: 2023/08/09 20:49:04 by hcho2            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 t_list	*dup_envp(char **envp)
@@ -20,28 +32,62 @@ char	*get_pwd(void)
 
 	tmp = getcwd(NULL, 0);
 	if (tmp == NULL)
-		return (". % ");
+		return (".-$ ");
 	spl = ft_split(tmp, '/');
 	free(tmp);
 	size = 0;
 	while (spl[size])
 		size++;
-	return (ft_strjoin(spl[size - 1], " % "));
+	return (ft_strjoin(spl[size - 1], "-$ "));
 }
 
-void	hello_minishell(void)
+void	do_execve(t_cmd **pipeline, t_list	**environ)
 {
-	printf("              _         _         __          __    __ \n");
-	printf("   ____ ___  (_) ____  (_) _____ / /_   ___  / /   / /\n");
-	printf("  / __ `__ \\/ / / __ \\/ / / ___// __ \\ / _ \\/ /   / /\n");
-	printf(" / / / / / / / / / / / / (__  )/ / / /( ___/ /___/ /___\n");
-	printf("/_/ /_/ /_/_/ /_/ /_/_/ /____//_/ /_/ \\___/_____/_____/\n");
-	printf("                    ver.1  @phan @jonhan @hcho2 @junssong\n");
+	if (count_pipe(pipeline) == 1 && \
+		is_built_in((*pipeline)->simple_cmd) > -1)
+	{
+		if (init_redir(*pipeline) == 1)
+		{
+			unlink_temp_files(*pipeline);
+			exit(1);
+		}
+		run_cmd(*pipeline, environ, is_built_in((*pipeline)->simple_cmd), 1);
+	}
+	else
+		pipexline(pipeline, environ);
+}
+
+int	do_parse(t_list	**environ, t_list **token_list, t_token **type_list)
+{
+	char	*input;
+
+	signal(SIGINT, p_handler);
+	signal(SIGQUIT, SIG_IGN);
+	input = readline(get_pwd());
+	if (!input)
+	{
+		ft_putendl_fd("exit", 1);
+		exit(0);
+	}
+	if (*input)
+		add_history(input);
+	if (tokenizer(input, token_list))
+	{
+		ft_lstclear(token_list, free);
+		free(input);
+		return (1);
+	}
+	expand_env(token_list, environ);
+	identify_token_type(token_list, type_list);
+	free(input);
+	if (syntax_error(type_list) == SYNTAX_ERROR)
+		return (1);
+	dequotenize(type_list);
+	return (0);
 }
 
 int	main(int ac, char **av, char **envp)
 {
-	char	*input;
 	t_list	*environ;
 	t_list	*token_list;
 	t_token	*type_list;
@@ -52,40 +98,14 @@ int	main(int ac, char **av, char **envp)
 	environ = dup_envp(envp);
 	(void)ac;
 	(void)av;
-	hello_minishell();
+	print_minishell();
 	while (1)
 	{
-		signal(SIGINT, p_handler);
-		signal(SIGQUIT, SIG_IGN);
-		input = readline(get_pwd());
-		if (!input)
-		{
-			ft_putendl_fd("\nexit", 1);
-			exit(0);
-		}
-		if (*input)
-			add_history(input);
-		tokenizer(input, &token_list);
-		expand_env(&token_list, &environ);
-		identify_token_type(&token_list, &type_list);
-		free(input);
-		if (syntax_error(&type_list) == SYNTAX_ERROR)
+		if (do_parse(&environ, &token_list, &type_list))
 			continue ;
-		dequotenize(&type_list);
 		pipeline = struct_cmd(&type_list);
 		change_heredoc(&pipeline);
-		if (count_pipe(&pipeline) == 1 && \
-			is_built_in(pipeline->simple_cmd) > -1)
-		{
-			if (init_redir(pipeline) == 1)
-			{
-				unlink_temp_files(pipeline);
-				exit(1);
-			}
-			run_cmd(pipeline, &environ, is_built_in(pipeline->simple_cmd), 1);
-		}
-		else
-			pipexline(&pipeline, &environ);
+		do_execve(&pipeline, &environ);
 		ft_cmdclear(&pipeline, free);
 		ft_tokenclear(&type_list, free);
 	}
