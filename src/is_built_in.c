@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   is_built_in.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:49:00 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:49:00 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/10 02:10:09 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	run_cmd(t_cmd *cmd, t_list **environ, int flag, int is_p)
 		if (is_p)
 			f[flag](cmd->simple_cmd, environ, cmd->io_fd[1]);
 		else
-			f[flag](cmd->simple_cmd, environ, 1);
+			f[flag](cmd->simple_cmd, environ, STDOUT_FILENO);
 		return (1);
 	}
 	else

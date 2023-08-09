@@ -6,7 +6,7 @@
 /*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:49:04 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/10 01:33:30 by hyunminjo        ###   ########.fr       */
+/*   Updated: 2023/08/10 02:13:37 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,19 @@ char	*get_pwd(void)
 
 void	do_execve(t_cmd **pipeline, t_list	**environ)
 {
-	if (count_pipe(pipeline) == 1 && \
-		is_built_in((*pipeline)->simple_cmd) > -1)
+	int	func_idx;
+
+	func_idx = is_built_in((*pipeline)->simple_cmd);
+	if (count_pipe(pipeline) == 1 && func_idx > -1)
 	{
 		if (init_redir(*pipeline) == 1)
 		{
 			unlink_temp_files(*pipeline);
 			exit(1);
 		}
-		run_cmd(*pipeline, environ, is_built_in((*pipeline)->simple_cmd), 1);
+		if (func_idx == 0)
+			ft_putendl_fd("exit", STDOUT_FILENO);
+		run_cmd(*pipeline, environ, func_idx, 1);
 	}
 	else
 		pipexline(pipeline, environ);
