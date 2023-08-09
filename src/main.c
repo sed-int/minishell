@@ -3,26 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:49:04 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:49:04 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/10 01:33:30 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_list	*dup_envp(char **envp)
-{
-	t_list	*environ;
-	int		i;
-
-	environ = NULL;
-	i = -1;
-	while (envp[++i])
-		ft_lstadd_back(&environ, ft_lstnew(ft_strdup(envp[i])));
-	return (environ);
-}
 
 char	*get_pwd(void)
 {
@@ -88,17 +76,16 @@ int	do_parse(t_list	**environ, t_list **token_list, t_token **type_list)
 
 int	main(int ac, char **av, char **envp)
 {
-	t_list	*environ;
-	t_list	*token_list;
-	t_token	*type_list;
-	t_cmd	*pipeline;
+	struct termios	term;
+	t_list			*environ;
+	t_list			*token_list;
+	t_token			*type_list;
+	t_cmd			*pipeline;
 
-	token_list = NULL;
-	type_list = NULL;
-	environ = dup_envp(envp);
 	(void)ac;
 	(void)av;
-	print_minishell();
+	tcgetattr(STDIN_FILENO, &term);
+	init_main(&environ, &token_list, &type_list, envp);
 	while (1)
 	{
 		if (do_parse(&environ, &token_list, &type_list))
@@ -109,4 +96,5 @@ int	main(int ac, char **av, char **envp)
 		ft_cmdclear(&pipeline, free);
 		ft_tokenclear(&type_list, free);
 	}
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }

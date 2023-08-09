@@ -15,10 +15,12 @@ LINE_CLEAR  =   "\x1b[1A\x1b[M"
 
 LIBFT		=	./libft/libft.a
 SRCDIR		=	./src
-SRC			=	dequotenizer.c main.c struct_cmd.c print_minishell.c \
+SRC			=	main.c main_util.c \
+				dequotenizer.c struct_cmd.c \
 				expansion.c expansion_util.c expansion_util2.c \
 				syntax_analyzer.c tokenizer.c tokenizer_help.c \
-				is_built_in.c ft_cd.c ft_echo.c ft_env.c ft_exit.c ft_export.c ft_pwd.c ft_unset.c \
+				is_built_in.c ft_cd.c ft_echo.c ft_env.c \
+				ft_exit.c ft_export.c ft_pwd.c ft_unset.c \
 				init_redir.c count_pipe.c \
 				pipeline.c pipeline_child.c pipeline_child_help.c \
 				pipeline_help.c pipeline_help2.c \
@@ -32,8 +34,8 @@ OBJ			=	$(SRC:.c=.o)
 NAME		= minishell
 CC			= cc
 CFLAGS		= -Wall -Wextra -Werror -Qunused-arguments
-LDFLAGS		= -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include -lreadline
-# LDFLAGS		= -L/opt/homebrew/opt/readline/lib -I/opt/homebrew/opt/readline/include -lreadline
+# LDFLAGS		= -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include -lreadline
+LDFLAGS		= -L/opt/homebrew/opt/readline/lib -I/opt/homebrew/opt/readline/include -lreadline
 LIBFLAGS	= -Llibft -lft -Ilibft
 
 all:		$(NAME)
@@ -51,12 +53,12 @@ $(LIBFT):
 clean:
 		@cd libft; make clean
 		@$(RM) $(OBJ)
-		@echo $(GREEN)"cleaned." $(EOC)
+		@echo $(GREEN)"minishell cleaned." $(EOC)
 
 fclean:		clean
 		@cd libft; make fclean
 		@$(RM) $(NAME)
-		@echo $(GREEN)"fcleaned." $(EOC)
+		@echo $(GREEN)"minishell fcleaned." $(EOC)
 
 re:			fclean all
 

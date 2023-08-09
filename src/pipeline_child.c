@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline_child.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:49:10 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:49:11 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/10 01:26:36 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ void	first_child(t_exec arg, t_cmd *cmd, t_list **env)
 	if (is_built_in(cmd->simple_cmd) > -1)
 	{
 		run_cmd(cmd, env, is_built_in(cmd->simple_cmd), 0);
-		exit(g_error_status);
+		exit(g_exit_code);
 	}
 	if (cmd->simple_cmd[0] == NULL)
-		exit(g_error_status);
+		exit(g_exit_code);
 	ft_execve(arg, cmd, envp);
 }
 
@@ -78,10 +78,10 @@ void	middle_child(t_exec arg, t_cmd *cmd, t_list **env)
 	if (is_built_in(cmd->simple_cmd) > -1)
 	{
 		run_cmd(cmd, env, is_built_in(cmd->simple_cmd), 0);
-		exit(g_error_status);
+		exit(g_exit_code);
 	}
 	if (cmd->simple_cmd[0] == NULL)
-		exit(g_error_status);
+		exit(g_exit_code);
 	ft_execve(arg, cmd, envp);
 }
 
@@ -101,11 +101,11 @@ void	last_child(t_exec arg, t_cmd *cmd, t_list **env)
 	if (is_built_in(cmd->simple_cmd) > -1)
 	{
 		run_cmd(cmd, env, is_built_in(cmd->simple_cmd), 0);
-		exit(g_error_status);
+		exit(g_exit_code);
 	}
 	close(arg.fds_next[0]);
 	close(arg.fds_next[1]);
 	if (cmd->simple_cmd[0] == NULL)
-		exit(g_error_status);
+		exit(g_exit_code);
 	ft_execve(arg, cmd, envp);
 }

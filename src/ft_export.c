@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:47:59 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:48:00 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/10 01:26:36 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	print_export(t_list **environ, int fd)
 		ft_putendl_fd(iter->content, fd);
 		iter = iter->next;
 	}
-	g_error_status = 0;
+	g_exit_code = 0;
 }
 
 void	ft_export(char **simple_cmd, t_list **environ, int fd)
@@ -84,10 +84,10 @@ void	ft_export(char **simple_cmd, t_list **environ, int fd)
 			if (tmp)
 				ft_lstdel_mid(environ, tmp);
 			ft_lstadd_back(environ, ft_lstnew(ft_strdup(simple_cmd[i])));
-			g_error_status = 0;
+			g_exit_code = 0;
 		}
 		else
-			g_error_status = 1;
+			g_exit_code = 1;
 		free(word);
 	}
 }

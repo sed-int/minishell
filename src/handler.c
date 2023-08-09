@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handler.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:48:48 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:48:48 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/10 01:26:36 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,12 @@
 void	p_handler(int sig)
 {
 	if (sig != SIGINT)
-	{
 		return ;
-	}
 	printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	g_error_status = 1;
+	g_exit_code = 1;
 }
 
 void	c_handler(int sig)

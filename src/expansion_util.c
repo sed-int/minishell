@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_util.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:47:15 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:47:37 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/10 01:26:36 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*expanded(char *str, t_list **environ, int size)
 
 	ret = ft_getenv(environ, str);
 	if (ret == NULL && !ft_strncmp(str, "?", 1))
-		ret = ft_strjoin(ft_itoa(g_error_status), \
+		ret = ft_strjoin(ft_itoa(g_exit_code), \
 			ft_substr(str, 1, ft_strlen(str)));
 	else if (ret == NULL && size != 0)
 		ret = ft_strdup("");

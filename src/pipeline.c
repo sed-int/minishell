@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:47:52 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:51:52 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/10 01:26:36 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	ft_check_pipe(t_exec *exec)
 
 int	check_heredoc_error(t_cmd *iter)
 {
-	if (g_error_status != 0)
+	if (g_exit_code != 0)
 	{
 		while (iter)
 		{
@@ -74,7 +74,7 @@ void	pipexline(t_cmd **pipeline, t_list **env)
 	t_exec	exec;
 	t_cmd	*iter;
 
-	g_error_status = 0;
+	g_exit_code = 0;
 	iter = *pipeline;
 	init_exec(&exec, pipeline, env);
 	fork_heredoc(pipeline);

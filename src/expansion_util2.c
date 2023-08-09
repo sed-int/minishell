@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_util2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:48:03 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:59:58 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/10 00:58:23 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	is_redir(t_list *node)
 		!ft_strcmp(node->prev->content, ">>"))));
 }
 
-void	to_expand(t_list *node, t_list *environ, int *i)
+void	expand_and_exchange(t_list *node, t_list *environ, int *i)
 {
 	t_list	*temp_list;
 
@@ -53,7 +53,7 @@ int	search_quoted(t_list *node, t_list *environ, int *q_flag, int *i)
 			*i += 1;
 		if (word[*i] == '$')
 		{
-			to_expand(node, environ, i);
+			expand_and_exchange(node, environ, i);
 			*q_flag = 0;
 			return (1);
 		}
@@ -81,7 +81,7 @@ void	search_exp(t_list *node, t_list *environ, int *exp_flag, int i)
 			if (word[i] == '$')
 			{
 				*exp_flag = 1;
-				to_expand(node, environ, &i);
+				expand_and_exchange(node, environ, &i);
 				break ;
 			}
 			i++;

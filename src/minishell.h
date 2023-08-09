@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:47:35 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:47:36 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/10 01:29:07 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,14 @@
 # include <dirent.h>
 # include <fcntl.h>
 # include <signal.h>
+# include <termios.h>
 
 # define SYNTAX_SUCCESS	0
 # define SYNTAX_ERROR	258
 # define SYNTAX_ERROR_MSG "minishell: syntax error near unexpected token: "
 # define HEREDOC_STATUS 4242
 
-int	g_error_status;
+int	g_exit_code;
 
 enum	e_type
 {
@@ -117,6 +118,8 @@ t_cmd	*struct_cmd(t_token **type_list);
 char	**detec_path(t_list **environ);
 int		ft_is_blank(int c);
 void	print_minishell(void);
+void	init_main(t_list **environ, t_list **token_list, \
+	t_token **type_list, char **envp);
 
 /* built_in */
 void	ft_export(char **simple_cmd, t_list **environ, int fd);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:47:55 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:47:57 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/10 01:26:36 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	print_cd_err(char *path, char *str)
 	ft_putstr_fd(path, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putendl_fd(str, 2);
-	g_error_status = 1;
+	g_exit_code = 1;
 }
 
 char	*check_path(char *word, t_list **environ)
@@ -62,7 +62,7 @@ void	ft_cd(char **simple_cmd, t_list **environ, int fd)
 
 	(void)fd;
 	cwd = NULL;
-	g_error_status = 0;
+	g_exit_code = 0;
 	pathname = check_path(simple_cmd[1], environ);
 	if (!pathname)
 		return ;

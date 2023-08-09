@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:48:30 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:48:30 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/10 01:26:36 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	ft_echo(char **simple_cmd, t_list **environ, int fd)
 {
 	int	i;
 
-	g_error_status = 0;
+	g_exit_code = 0;
 	if (simple_cmd[1] != NULL && !ft_strcmp("-n", simple_cmd[1]))
 	{
 		i = check_more_newline(simple_cmd);

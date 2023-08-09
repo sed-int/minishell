@@ -1,3 +1,18 @@
+#-------------------------------------------
+
+BLACK       =   "\033[0;30m"
+GRAY        =   "\033[1;30m"
+RED         =   "\033[1;31m"
+GREEN       =   "\033[0;32m"
+YELLOW      =   "\033[1;33m"
+PURPLE      =   "\033[0;35m"
+CYAN        =   "\033[1;36m"
+WHITE       =   "\033[1;37m"
+EOC         =   "\033[0;0m"
+LINE_CLEAR  =   "\x1b[1A\x1b[M"
+
+#-------------------------------------------
+
 NAME = libft.a
 
 CC = cc
@@ -29,23 +44,27 @@ endif
 
 
 %.o: %.c
-	$(CC) $(CFLAG) -c $< -o $@
+	@$(CC) $(CFLAG) -c $< -o $@
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	ar rsc $(NAME) $(OBJS)
+	@ar rsc $(NAME) $(OBJS)
+	@echo $(GREEN)"libft made." $(EOC)
 
 clean:
-	rm -f $(OBJS) $(SRCS_BN:.c=.o)
+	@rm -f $(OBJS) $(SRCS_BN:.c=.o)
+	@echo $(GREEN)"libft cleaned." $(EOC)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
+	@echo $(GREEN)"libft fcleaned." $(EOC)
 
 re: fclean all
 
 bonus : $(OBJS)
 	@sleep 1
 	@make WITH_BONUS=1 all
+	@echo $(GREEN)"libft bonus made." $(EOC)
 
 .PHONY: all clean fclean re bonus

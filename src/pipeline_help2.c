@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline_help2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:49:15 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:49:16 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/10 01:26:36 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ void	wait_child(pid_t pid, int count)
 		if (waitpid(-1, &status, 0) > 0)
 		{
 			if (WIFEXITED(status))
-				g_error_status = WEXITSTATUS(status);
+				g_exit_code = WEXITSTATUS(status);
 			else if (WTERMSIG(status) == 2)
-				g_error_status = 130;
+				g_exit_code = 130;
 			else if (WTERMSIG(status) == 3)
 			{
-				g_error_status = 131;
+				g_exit_code = 131;
 				printf("QUIT: 3\n");
 			}
 		}
@@ -75,6 +75,6 @@ void	fork_heredoc(t_cmd **pipeline)
 	}
 	if (waitpid(-1, &status, 0) > 0)
 	{
-		g_error_status = WEXITSTATUS(status);
+		g_exit_code = WEXITSTATUS(status);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:48:35 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:48:36 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/10 01:26:36 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	ft_exit(char **simple_cmd, t_list **environ, int fd)
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(simple_cmd[1], 2);
 		ft_putendl_fd(": numeric argument required", 2);
-		g_error_status = 255;
+		g_exit_code = 255;
 		exit(255);
 	}
 	else if (simple_cmd[1] && simple_cmd[2])
@@ -33,9 +33,9 @@ void	ft_exit(char **simple_cmd, t_list **environ, int fd)
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(simple_cmd[1], 2);
 		ft_putendl_fd(": too many arguments", 2);
-		g_error_status = 255;
+		g_exit_code = 255;
 		exit(255);
 	}
-	g_error_status = exit_status;
+	g_exit_code = exit_status;
 	exit(exit_status);
 }
