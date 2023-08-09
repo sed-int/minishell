@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/09 20:47:55 by hcho2             #+#    #+#             */
+/*   Updated: 2023/08/09 20:47:57 by hcho2            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	print_cd_err(char *path, char *str)
@@ -35,7 +47,7 @@ char	*check_cwd(void)
 	if (cwd == NULL)
 	{
 		perror("cd: error retrieving current directory: \
-			 getcwd: cannot access parent ");
+getcwd: cannot access parent ");
 		return (NULL);
 	}
 	return (cwd);
