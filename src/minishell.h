@@ -72,10 +72,14 @@ void	expand_env(t_list **token_list, t_list **environ);
 void	expansion(t_list *node, char *content, int *idx, t_list **environ);
 void	identify_token_type(t_list **lst, t_token **token_lst);
 int		syntax_error(t_token **type_list);
-void	init_var(t_vars *vars);
+void	init_vars(t_vars *vars);
 void	check_quote(t_vars *vars, char q);
 void	expand_key(char *content, t_vars *vars, t_list **environ);
-void	sub_key(char *content, t_vars *vars, t_list **environ);
+void	sub_key(char *content, t_vars *vars);
+void	search_exp(t_list *node, t_list *environ, int *exp_flag, int i);
+void	delete_double(t_list **token_list, \
+	t_list **node, t_list **next, int *exp_flag);
+int		is_delim(char c);
 
 /* util */
 char	*ft_lst_strjoin(t_list **lst);

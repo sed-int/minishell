@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	init_var(t_vars *vars)
+void	init_vars(t_vars *vars)
 {
 	vars->str = NULL;
 	vars->size = 0;
@@ -21,6 +21,7 @@ char	*expanded(char *str, t_list **environ, int size)
 	else if (ret == NULL && size == 0)
 		ret = ft_strdup("$");
 	free(str);
+	return (ret);
 }
 
 void	expand_key(char *content, t_vars *vars, t_list **environ)
@@ -39,7 +40,7 @@ void	expand_key(char *content, t_vars *vars, t_list **environ)
 	vars->i += vars->size;
 }
 
-void	sub_key(char *content, t_vars *vars, t_list **environ)
+void	sub_key(char *content, t_vars *vars)
 {
 	while (content[vars->i + vars->size]
 		&& !ft_strchr("\'\"", content[vars->i + vars->size]))
