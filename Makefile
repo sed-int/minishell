@@ -16,7 +16,8 @@ LINE_CLEAR  =   "\x1b[1A\x1b[M"
 LIBFT		=	./libft/libft.a
 SRCDIR		=	./src
 SRC			=	dequotenizer.c main.c struct_cmd.c \
-				expansion.c syntax_analyzer.c tokenizer.c is_built_in.c \
+				expansion.c expansion_util.c expansion_util2.c \
+				syntax_analyzer.c tokenizer.c is_built_in.c \
 				init_redir.c count_pipe.c pipeline.c \
 				ft_cd.c ft_echo.c ft_env.c ft_exit.c ft_export.c ft_pwd.c ft_unset.c \
 				handler.c heredoc.c heredoc_util.c \

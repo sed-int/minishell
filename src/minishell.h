@@ -26,13 +26,13 @@ enum	e_type
 	WORD
 };
 
-typedef struct s_exp_vars
+typedef struct s_vars
 {
-	char	*exp;
-	char	*new;
-	char	*parsed_env;
-	int		env_size;
-}	t_exp_vars;
+	char	*str;
+	int		size;
+	int		q_flag;
+	int		i;
+}	t_vars;
 
 typedef struct s_token
 {
@@ -72,6 +72,10 @@ void	expand_env(t_list **token_list, t_list **environ);
 void	expansion(t_list *node, char *content, int *idx, t_list **environ);
 void	identify_token_type(t_list **lst, t_token **token_lst);
 int		syntax_error(t_token **type_list);
+void	init_var(t_vars *vars);
+void	check_quote(t_vars *vars, char q);
+void	expand_key(char *content, t_vars *vars, t_list **environ);
+void	sub_key(char *content, t_vars *vars, t_list **environ);
 
 /* util */
 char	*ft_lst_strjoin(t_list **lst);

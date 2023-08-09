@@ -24,77 +24,28 @@ char	*ft_lst_strjoin(t_list **lst)
 	return (res);
 }
 
+
+
 void	expansion(t_list *node, char *content, int *idx, t_list **environ)
 {
+	t_vars	vars;
 	t_list	*lst;
-	char	*str;
-	char	*env;
-	int		key_size;
-	int		q_flag;
-	int		i;
 
+	init_vars(&vars);
 	lst = NULL;
-	i = 0;
-	q_flag = 0;
-	while (content[i])
+	while (content[vars.i])
 	{
-		key_size = 0;
-		if (content[i + key_size] == '$' && q_flag != '\'')
-		{
-			i++;
-			while (content[i + key_size] && !is_delim(content[i + key_size]))
-			{
-				if (q_flag == '\"' && (ft_is_blank(content[i + key_size]) \
-					|| content[i + key_size] == '$'))
-					break ;
-				key_size++;
-			}
-			str = ft_substr(content, i, key_size);
-			env = ft_getenv(environ, str);
-			if (env == NULL && !ft_strncmp(str, "?", 1))
-				env = ft_strjoin(ft_itoa(g_error_status), \
-					ft_substr(str, 1, ft_strlen(str)));
-			else if (env == NULL && key_size != 0)
-				env = ft_strdup("");
-			else if (env == NULL && key_size == 0)
-				env = ft_strdup("$");
-			free(str);
-			ft_lstadd_back(&lst, ft_lstnew(env));
-			i += key_size;
-		}
-		else if (content[i + key_size] == '\'')
-		{
-			if (q_flag == 0)
-				q_flag = '\'';
-			else if (q_flag == '\'')
-				q_flag = 0;
-			ft_lstadd_back(&lst, ft_lstnew(ft_strdup("\'")));
-			i++;
-		}
-		else if (content[i + key_size] == '\"')
-		{
-			if (q_flag == 0)
-				q_flag = '\"';
-			else if (q_flag == '\"')
-				q_flag = 0;
-			ft_lstadd_back(&lst, ft_lstnew(ft_strdup("\"")));
-			i++;
-		}
+		vars.size = 0;
+		if (content[vars.i + vars.size] == '$' && vars.q_flag != '\'')
+			expand_key(content, &vars, environ);
+		else if (content[vars.i + vars.size] == '\''
+			|| content[vars.i + vars.size] == '\"')
+			check_quote(&vars, content[vars.i + vars.size]);
 		else
-		{
-			while (content[i + key_size]
-				&& !ft_strchr("\'\"", content[i + key_size]))
-			{
-				if (q_flag != '\'' && content[i + key_size] == '$')
-					break ;
-				key_size++;
-			}
-			str = ft_substr(content, i, key_size);
-			ft_lstadd_back(&lst, ft_lstnew(str));
-			i += key_size;
-		}
+			sub_key(content, &vars, environ);
+		ft_lstadd_back(&lst, ft_lstnew(vars.str));
 	}
-	*idx = i;
+	*idx = vars.i;
 	free(node->content);
 	node->content = ft_lst_strjoin(&lst);
 	ft_lstclear(&lst, free);
