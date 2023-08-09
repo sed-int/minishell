@@ -67,5 +67,6 @@ void	ft_cd(char **simple_cmd, t_list **environ, int fd)
 			return ;
 		free(tmp->content);
 		tmp->content = ft_strjoin("PWD=", cwd);
+		free(cwd);
 	}
 }
