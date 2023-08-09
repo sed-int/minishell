@@ -6,7 +6,7 @@
 /*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:47:52 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:47:53 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/09 20:51:52 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	ft_pork_child(pid_t pid, t_exec *exec, t_cmd **iter, t_list **env)
 
 void	ft_check_pipe(t_exec *exec)
 {
-	if (exec->repeat_fork > 0z)
+	if (exec->repeat_fork > 0)
 	{
 		close(exec->fds_prev[0]);
 		close(exec->fds_prev[1]);

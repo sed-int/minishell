@@ -6,7 +6,7 @@
 /*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:48:26 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:48:26 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/09 21:18:03 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,19 @@ void	expansion(t_list *node, char *content, int *idx, t_list **environ)
 	ft_lstclear(&lst, free);
 }
 
+void	delete_empty_node(t_list **token_list)
+{
+	t_list	*iter;
+
+	iter = *token_list;
+	while (iter)
+	{
+		if (ft_strlen(iter->content) == 0)
+			ft_lstdel_mid(token_list, iter);
+		iter = iter->next;
+	}
+}
+
 void	expand_env(t_list **token_list, t_list **environ)
 {
 	t_list	*iter;
@@ -86,4 +99,5 @@ void	expand_env(t_list **token_list, t_list **environ)
 		if (exp_flag && iter != NULL)
 			delete_double(token_list, &iter, &next_head, &exp_flag);
 	}
+	delete_empty_node(token_list);
 }

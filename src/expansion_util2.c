@@ -6,7 +6,7 @@
 /*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:48:03 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:48:03 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/09 20:59:58 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ void	search_exp(t_list *node, t_list *environ, int *exp_flag, int i)
 		{
 			if (word[i] == '$')
 			{
-				*exp_flag = search_quoted(node, environ, &q_flag, &i);
+				*exp_flag = 1;
+				to_expand(node, environ, &i);
 				break ;
 			}
 			i++;
