@@ -6,7 +6,7 @@
 /*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:47:35 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/10 01:29:07 by hyunminjo        ###   ########.fr       */
+/*   Updated: 2023/08/10 12:48:20 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <signal.h>
 # include <termios.h>
 
+# define OPEN_SUCCESS 0
+# define OPEN_ERROR 1
 # define SYNTAX_SUCCESS	0
 # define SYNTAX_ERROR	258
 # define SYNTAX_ERROR_MSG "minishell: syntax error near unexpected token: "

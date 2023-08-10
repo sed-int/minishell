@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_redir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:48:57 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:48:58 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/10 12:48:28 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ int	open_redir_in(t_cmd *cmd, t_token *iter)
 	cmd->io_fd[0] = open(iter->content, O_RDONLY);
 	if (cmd->io_fd[0] < 0)
 	{
-		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		perror(iter->content);
-		return (1);
+		return (OPEN_ERROR);
 	}
-	return (0);
+	return (OPEN_SUCCESS);
 }
 
 int	open_redir_out(t_cmd *cmd, t_token *iter)
@@ -33,11 +33,11 @@ int	open_redir_out(t_cmd *cmd, t_token *iter)
 	cmd->io_fd[1] = open(iter->content, O_APPEND | O_WRONLY | O_CREAT, 0644);
 	if (cmd->io_fd[1] < 0)
 	{
-		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		perror(iter->content);
-		return (1);
+		return (OPEN_ERROR);
 	}
-	return (0);
+	return (OPEN_SUCCESS);
 }
 
 int	init_redir(t_cmd *cmd)
@@ -52,19 +52,19 @@ int	init_redir(t_cmd *cmd)
 		if (type == LSR || type == D_LSR)
 		{
 			if (open_redir_in(cmd, redir_iter) == 1)
-				return (1);
+				return (OPEN_ERROR);
 		}
 		else if (type == GRT)
 		{
 			if (open_redir_out(cmd, redir_iter) == 1)
-				return (1);
+				return (OPEN_ERROR);
 		}
 		else if (type == D_GRT)
 		{
 			if (open_redir_out(cmd, redir_iter) == 1)
-				return (1);
+				return (OPEN_ERROR);
 		}
 		redir_iter = redir_iter->next;
 	}
-	return (0);
+	return (OPEN_SUCCESS);
 }

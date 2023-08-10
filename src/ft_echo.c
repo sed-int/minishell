@@ -6,7 +6,7 @@
 /*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:48:30 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/10 01:26:36 by hyunminjo        ###   ########.fr       */
+/*   Updated: 2023/08/10 12:48:23 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,5 @@ void	ft_echo(char **simple_cmd, t_list **environ, int fd)
 			ft_putstr_fd(" ", fd);
 		i++;
 	}
-	write(fd, "\n", 1);
+	write(fd, "\n", STDOUT_FILENO);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline_help.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:49:13 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:49:13 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/10 12:48:16 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static void	ft_execve_error(t_cmd *cmd)
 {
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd->simple_cmd[0], 2);
-	ft_putendl_fd(": command not found", 2);
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(cmd->simple_cmd[0], STDERR_FILENO);
+	ft_putendl_fd(": command not found", STDERR_FILENO);
 	exit(127);
 }
 
@@ -33,7 +33,7 @@ void	ft_execve(t_exec arg, t_cmd *cmd, char **envp)
 		{
 			if (access(valid_cmd, X_OK) < 0)
 			{
-				ft_putstr_fd("minishell: ", 2);
+				ft_putstr_fd("minishell: ", STDERR_FILENO);
 				perror(valid_cmd);
 				exit(126);
 			}

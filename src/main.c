@@ -6,7 +6,7 @@
 /*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:49:04 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/10 02:13:37 by hyunminjo        ###   ########.fr       */
+/*   Updated: 2023/08/10 12:39:34 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	do_execve(t_cmd **pipeline, t_list	**environ)
 	func_idx = is_built_in((*pipeline)->simple_cmd);
 	if (count_pipe(pipeline) == 1 && func_idx > -1)
 	{
-		if (init_redir(*pipeline) == 1)
+		if (init_redir(*pipeline) == OPEN_ERROR)
 		{
 			unlink_temp_files(*pipeline);
 			exit(1);
@@ -58,7 +58,7 @@ int	do_parse(t_list	**environ, t_list **token_list, t_token **type_list)
 	input = readline(get_pwd());
 	if (!input)
 	{
-		ft_putendl_fd("exit", 1);
+		ft_putendl_fd("exit", STDOUT_FILENO);
 		exit(0);
 	}
 	if (*input)

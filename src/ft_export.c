@@ -6,7 +6,7 @@
 /*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:47:59 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/10 01:26:36 by hyunminjo        ###   ########.fr       */
+/*   Updated: 2023/08/10 12:48:25 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	print_export_err(char *str)
 {
-	ft_putstr_fd("minishell: export: \'", 2);
-	ft_putstr_fd(str, 2);
-	ft_putstr_fd("\': not a valid identifier\n", 2);
+	ft_putstr_fd("minishell: export: \'", STDERR_FILENO);
+	ft_putstr_fd(str, STDERR_FILENO);
+	ft_putstr_fd("\': not a valid identifier\n", STDERR_FILENO);
 	return (0);
 }
 
