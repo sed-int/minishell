@@ -6,7 +6,7 @@
 /*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:49:00 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/10 02:10:09 by hyunminjo        ###   ########.fr       */
+/*   Updated: 2023/08/10 15:59:23 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	is_built_in(char **simple_cmd)
 {
 	char	*cmd;
 
-	if (!*simple_cmd)
+	if (!simple_cmd || !*simple_cmd)
 		return (-2);
 	cmd = simple_cmd[0];
 	if (!ft_strcmp(cmd, "exit"))

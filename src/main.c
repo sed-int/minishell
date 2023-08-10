@@ -6,7 +6,7 @@
 /*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:49:04 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/10 12:39:34 by hyunminjo        ###   ########.fr       */
+/*   Updated: 2023/08/10 16:29:40 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,24 +29,26 @@ char	*get_pwd(void)
 	return (ft_strjoin(spl[size - 1], "-$ "));
 }
 
-void	do_execve(t_cmd **pipeline, t_list	**environ)
+void	do_execve(t_cmd *pipeline, t_list **environ)
 {
 	int	func_idx;
 
-	func_idx = is_built_in((*pipeline)->simple_cmd);
-	if (count_pipe(pipeline) == 1 && func_idx > -1)
+	if (!pipeline)
+		return ;
+	func_idx = is_built_in(pipeline->simple_cmd);
+	if (count_pipe(&pipeline) == 1 && func_idx > -1)
 	{
-		if (init_redir(*pipeline) == OPEN_ERROR)
+		if (init_redir(pipeline) == OPEN_ERROR)
 		{
-			unlink_temp_files(*pipeline);
+			unlink_temp_files(pipeline);
 			exit(1);
 		}
 		if (func_idx == 0)
 			ft_putendl_fd("exit", STDOUT_FILENO);
-		run_cmd(*pipeline, environ, func_idx, 1);
+		run_cmd(pipeline, environ, func_idx, 1);
 	}
 	else
-		pipexline(pipeline, environ);
+		pipexline(&pipeline, environ);
 }
 
 int	do_parse(t_list	**environ, t_list **token_list, t_token **type_list)
@@ -63,7 +65,7 @@ int	do_parse(t_list	**environ, t_list **token_list, t_token **type_list)
 	}
 	if (*input)
 		add_history(input);
-	if (tokenizer(input, token_list))
+	if (!*input || tokenizer(input, token_list))
 	{
 		ft_lstclear(token_list, free);
 		free(input);
@@ -96,7 +98,7 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		pipeline = struct_cmd(&type_list);
 		change_heredoc(&pipeline);
-		do_execve(&pipeline, &environ);
+		do_execve(pipeline, &environ);
 		ft_cmdclear(&pipeline, free);
 		ft_tokenclear(&type_list, free);
 	}

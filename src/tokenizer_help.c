@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_help.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:49:31 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:49:32 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/10 12:55:37 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	check_lsr_grt(int *token_size, char **input, t_list **token_list)
 		make_token((*input)++, token_list, 1);
 }
 
-int	check_quto(int *flag, int *token_size, char **input)
+int	check_quote_3(int *flag, int *token_size, char **input)
 {
 	*flag = **input;
 	while (*flag && **input)
@@ -78,7 +78,7 @@ int	help_tokenizer(char **input, int *token_size, \
 		check_lsr_grt(token_size, input, token_list);
 	else if (**input == '\"' || **input == '\'')
 	{
-		if (check_quto(flag, token_size, input))
+		if (check_quote_3(flag, token_size, input))
 			return (1);
 	}
 	else

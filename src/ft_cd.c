@@ -6,7 +6,7 @@
 /*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:47:55 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/10 12:48:24 by hyunminjo        ###   ########.fr       */
+/*   Updated: 2023/08/10 12:51:29 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ char	*check_cwd(void)
 	cwd = getcwd(NULL, 0);
 	if (cwd == NULL)
 	{
-		perror("cd: error retrieving current directory: \
-getcwd: cannot access parent ");
+		ft_putstr_fd("cd: error retrieving current directory: ", STDOUT_FILENO);
+		perror("getcwd: cannot access parent ");
 		return (NULL);
 	}
 	return (cwd);
