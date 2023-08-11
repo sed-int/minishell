@@ -6,7 +6,7 @@
 /*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:48:03 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/11 13:11:33 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/11 14:50:27 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,9 @@ void	search_exp(t_list *node, t_list *environ, int *exp_flag, int i)
 void	delete_double(t_list **token_list, \
 	t_list **node, t_list **next, int *exp_flag)
 {
+	*exp_flag = 0;
+	if (is_redir((*node)->prev))
+		return ;
 	ft_lstdel_mid(token_list, (*node)->prev);
 	*node = *next;
-	*exp_flag = 0;
 }

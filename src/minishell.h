@@ -6,7 +6,7 @@
 /*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:47:35 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/11 13:59:14 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/11 14:34:16 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,5 +164,7 @@ char	*get_pwd(void);
 /* signal */
 void	p_handler(int sig);
 void	c_handler(int sig);
+
+void	print_type_list(t_cmd **list);
 
 #endif

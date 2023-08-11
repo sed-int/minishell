@@ -24,9 +24,7 @@ SRC			=	main.c main_util.c \
 				init_redir.c count_pipe.c pipeline.c pipeline_child.c \
 				pipeline_child_help.c pipeline_help.c pipeline_help2.c \
 				handler.c heredoc.c heredoc_util.c \
-				utils.c utils_2.c utils_3.c utils_4.c \
-				# test.c
-
+				utils.c utils_2.c utils_3.c utils_4.c
 
 SRC			:=	$(addprefix $(SRCDIR)/, $(SRC))
 OBJ			=	$(SRC:.c=.o)
