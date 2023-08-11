@@ -6,7 +6,7 @@
 /*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:48:43 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/11 13:12:01 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/11 15:34:53 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,13 @@ t_list	*ft_getenvnode(t_list **environ, char *word)
 	while (iter)
 	{
 		if (!ft_strncmp(iter->content, new_word, ft_strlen(new_word)))
+		{
+			free(new_word);
 			return (iter);
+		}
 		iter = iter->next;
 	}
+	free(new_word);
 	return (NULL);
 }
 

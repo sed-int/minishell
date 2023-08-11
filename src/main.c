@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
+/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:49:04 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/11 15:27:45 by hyunminjo        ###   ########.fr       */
+/*   Updated: 2023/08/11 16:56:41 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ char	*get_pwd(void)
 		return (".-$ ");
 	spl = ft_split(tmp, '/');
 	free(tmp);
+	if (!*spl)
+	{
+		free_all(spl);
+		return (ft_strdup("/-$ "));
+	}
 	size = 0;
 	while (spl[size])
 		size++;
@@ -54,6 +59,15 @@ void	do_execve(t_cmd *pipeline, t_list **environ)
 		pipexline(&pipeline, environ);
 }
 
+void	check_input(char *input)
+{
+	if (!input)
+	{
+		ft_putendl_fd("exit", STDOUT_FILENO);
+		exit(0);
+	}
+}
+
 int	do_parse(t_list	**environ, t_list **token_list, t_token **type_list)
 {
 	char	*input;
@@ -64,11 +78,7 @@ int	do_parse(t_list	**environ, t_list **token_list, t_token **type_list)
 	prompt = get_pwd();
 	input = readline(prompt);
 	free(prompt);
-	if (!input)
-	{
-		ft_putendl_fd("exit", STDOUT_FILENO);
-		exit(0);
-	}
+	check_input(input);
 	if (*input)
 		add_history(input);
 	if (!*input || tokenizer(input, token_list))

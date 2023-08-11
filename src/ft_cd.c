@@ -6,7 +6,7 @@
 /*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:47:55 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/11 13:11:40 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/11 16:00:27 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*check_path(char *word, t_list **environ)
 	char	*pathname;
 
 	if (word)
-		pathname = word;
+		pathname = ft_strdup(word);
 	else
 	{
 		pathname = ft_getenv(environ, "HOME");
@@ -53,12 +53,27 @@ char	*check_cwd(void)
 	return (cwd);
 }
 
+int	renew_pwd(t_list **environ)
+{
+	char	*cwd;
+	t_list	*tmp;
+
+	cwd = check_cwd();
+	if (!cwd)
+		return (1);
+	tmp = ft_getenvnode(environ, "PWD");
+	if (tmp == NULL)
+		return (1);
+	free(tmp->content);
+	tmp->content = ft_strjoin("PWD=", cwd);
+	free(cwd);
+	return (0);
+}
+
 void	ft_cd(char **simple_cmd, t_list **environ, int fd)
 {
 	char	*pathname;
 	int		ch;
-	t_list	*tmp;
-	char	*cwd;
 
 	(void)fd;
 	g_exit_code = 0;
@@ -69,15 +84,6 @@ void	ft_cd(char **simple_cmd, t_list **environ, int fd)
 	if (ch < 0)
 		print_cd_err(pathname, "No such file or directory");
 	else
-	{
-		cwd = check_cwd();
-		if (!cwd)
-			return ;
-		tmp = ft_getenvnode(environ, "PWD");
-		if (tmp == NULL)
-			return ;
-		free(tmp->content);
-		tmp->content = ft_strjoin("PWD=", cwd);
-		free(cwd);
-	}
+		renew_pwd(environ);
+	free(pathname);
 }

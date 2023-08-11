@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
+/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:47:35 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/11 15:30:19 by hyunminjo        ###   ########.fr       */
+/*   Updated: 2023/08/11 16:44:33 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ char	**make_envp(t_list **env);
 void	init_exec(t_exec *exec, t_cmd **pipeline, t_list **env);
 void	wait_child(pid_t pid, int count);
 void	close_fd(t_exec *arg);
-void	fork_heredoc(t_cmd **pipeline);
+void	fork_heredoc(t_cmd **pipeline, t_exec *exec);
 void	first_child(t_exec arg, t_cmd *cmd, t_list **env);
 void	first_child_help(t_exec *arg, t_cmd *cmd);
 void	middle_child(t_exec arg, t_cmd *cmd, t_list **env);

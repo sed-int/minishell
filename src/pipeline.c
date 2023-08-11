@@ -6,13 +6,13 @@
 /*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:47:52 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/11 13:12:49 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/11 16:45:35 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_pork_child(pid_t pid, t_exec *exec, t_cmd **iter, t_list **env)
+void	ft_fork_child(pid_t pid, t_exec *exec, t_cmd **iter, t_list **env)
 {
 	if (pid == -1)
 		exit(1);
@@ -77,7 +77,7 @@ void	pipexline(t_cmd **pipeline, t_list **env)
 	g_exit_code = 0;
 	iter = *pipeline;
 	init_exec(&exec, pipeline, env);
-	fork_heredoc(pipeline);
+	fork_heredoc(pipeline, &exec);
 	if (check_heredoc_error(iter))
 		return ;
 	if (pipe(exec.fds_prev) < 0)
@@ -87,8 +87,9 @@ void	pipexline(t_cmd **pipeline, t_list **env)
 		ft_check_pipe(&exec);
 		signal(SIGINT, SIG_IGN);
 		pid = fork();
-		ft_pork_child(pid, &exec, &iter, env);
+		ft_fork_child(pid, &exec, &iter, env);
 	}
+	free_all(exec.path);
 	close_fd(&exec);
 	wait_child(pid, exec.count);
 }

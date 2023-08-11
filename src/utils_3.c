@@ -6,7 +6,7 @@
 /*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:49:40 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/09 20:49:40 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/11 16:46:51 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	ft_tokenclear(t_token **lst, void (*del)(void *))
 	{
 		tmp = *lst;
 		del((*lst)->content);
+		del((*lst)->temp);
 		*lst = tmp->next;
 		free(tmp);
 	}
