@@ -6,7 +6,7 @@
 /*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:47:35 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/11 14:34:16 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/11 15:03:20 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,7 @@ void	check_quote(t_vars *vars, char q);
 void	expand_key(char *content, t_vars *vars, t_list **environ);
 void	sub_key(char *content, t_vars *vars);
 void	search_exp(t_list *node, t_list *environ, int *exp_flag, int i);
-void	delete_double(t_list **token_list, \
-	t_list **node, t_list **next, int *exp_flag);
+void	delete_double(t_list **token_list, t_list **node, t_list **next);
 int		is_delim(char c);
 int		is_redir(t_list *node);
 
@@ -164,7 +163,5 @@ char	*get_pwd(void);
 /* signal */
 void	p_handler(int sig);
 void	c_handler(int sig);
-
-void	print_type_list(t_cmd **list);
 
 #endif

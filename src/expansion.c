@@ -6,7 +6,7 @@
 /*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:48:26 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/11 14:49:01 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/11 15:01:57 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,10 @@ void	expand_env(t_list **token_list, t_list **environ)
 	char	*tmp;
 	int		exp_flag;
 
-	exp_flag = 0;
 	iter = *token_list;
 	while (iter)
 	{
+		exp_flag = 0;
 		tmp = (char *)iter->content;
 		if (iter->prev && !ft_strcmp("<<", iter->prev->content))
 		{
@@ -97,7 +97,7 @@ void	expand_env(t_list **token_list, t_list **environ)
 			search_exp(iter, *environ, &exp_flag, 0);
 		iter = iter->next;
 		if (exp_flag && iter != NULL)
-			delete_double(token_list, &iter, &next_head, &exp_flag);
+			delete_double(token_list, &iter, &next_head);
 	}
 	delete_empty_node(token_list);
 }
