@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
+/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:48:26 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/10 16:27:49 by hyunminjo        ###   ########.fr       */
+/*   Updated: 2023/08/11 14:13:08 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	expand_env(t_list **token_list, t_list **environ)
 		if (ft_strchr(tmp, '$'))
 			search_exp(iter, *environ, &exp_flag, 0);
 		iter = iter->next;
-		if (exp_flag && iter != NULL)
+		if (exp_flag && iter != NULL && !is_redir(iter->prev))
 			delete_double(token_list, &iter, &next_head, &exp_flag);
 	}
 	delete_empty_node(token_list);

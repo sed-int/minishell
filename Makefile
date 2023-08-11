@@ -25,6 +25,7 @@ SRC			=	main.c main_util.c \
 				pipeline_child_help.c pipeline_help.c pipeline_help2.c \
 				handler.c heredoc.c heredoc_util.c \
 				utils.c utils_2.c utils_3.c utils_4.c \
+				# test.c
 
 
 SRC			:=	$(addprefix $(SRCDIR)/, $(SRC))
@@ -33,8 +34,8 @@ OBJ			=	$(SRC:.c=.o)
 NAME		= minishell
 CC			= cc
 CFLAGS		= -Wall -Wextra -Werror -Qunused-arguments
-# LDFLAGS		= -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include -lreadline
-LDFLAGS		= -L/opt/homebrew/opt/readline/lib -I/opt/homebrew/opt/readline/include -lreadline
+LDFLAGS		= -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include -lreadline
+# LDFLAGS		= -L/opt/homebrew/opt/readline/lib -I/opt/homebrew/opt/readline/include -lreadline
 LIBFLAGS	= -Llibft -lft -Ilibft
 
 all:		$(NAME)
