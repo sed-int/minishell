@@ -6,7 +6,7 @@
 /*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:49:21 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/10 01:31:26 by hyunminjo        ###   ########.fr       */
+/*   Updated: 2023/08/11 15:20:00 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,13 @@
 
 void	print_minishell(void)
 {
+	int		fd;
+	char	hello[11996];
+
+	fd = open("./parshell.txt", O_RDONLY);
+	read(fd, hello, 11996);
+	printf("%s\n", hello);
+	close(fd);
 	printf("              _         _         __          __    __ \n");
 	printf("   ____ ___  (_) ____  (_) _____ / /_   ___  / /   / /\n");
 	printf("  / __ `__ \\/ / / __ \\/ / / ___// __ \\ / _ \\/ /   / /\n");

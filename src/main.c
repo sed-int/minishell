@@ -6,7 +6,7 @@
 /*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:49:04 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/10 16:29:40 by hyunminjo        ###   ########.fr       */
+/*   Updated: 2023/08/11 15:27:45 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ char	*get_pwd(void)
 {
 	char	**spl;
 	char	*tmp;
+	char	*joined;
 	int		size;
 
 	tmp = getcwd(NULL, 0);
@@ -26,7 +27,9 @@ char	*get_pwd(void)
 	size = 0;
 	while (spl[size])
 		size++;
-	return (ft_strjoin(spl[size - 1], "-$ "));
+	joined = ft_strjoin(spl[size - 1], "-$ ");
+	free_all(spl);
+	return (joined);
 }
 
 void	do_execve(t_cmd *pipeline, t_list **environ)
@@ -54,10 +57,13 @@ void	do_execve(t_cmd *pipeline, t_list **environ)
 int	do_parse(t_list	**environ, t_list **token_list, t_token **type_list)
 {
 	char	*input;
+	char	*prompt;
 
 	signal(SIGINT, p_handler);
 	signal(SIGQUIT, SIG_IGN);
-	input = readline(get_pwd());
+	prompt = get_pwd();
+	input = readline(prompt);
+	free(prompt);
 	if (!input)
 	{
 		ft_putendl_fd("exit", STDOUT_FILENO);

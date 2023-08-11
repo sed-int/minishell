@@ -6,7 +6,7 @@
 /*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:47:35 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/10 12:56:18 by hyunminjo        ###   ########.fr       */
+/*   Updated: 2023/08/11 15:30:19 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 # define SYNTAX_SUCCESS	0
 # define SYNTAX_ERROR	258
 # define SYNTAX_ERROR_MSG "minishell: syntax error near unexpected token: "
-# define HEREDOC_STATUS 4242
 
 int	g_exit_code;
 
@@ -97,9 +96,9 @@ void	check_quote(t_vars *vars, char q);
 void	expand_key(char *content, t_vars *vars, t_list **environ);
 void	sub_key(char *content, t_vars *vars);
 void	search_exp(t_list *node, t_list *environ, int *exp_flag, int i);
-void	delete_double(t_list **token_list, \
-	t_list **node, t_list **next, int *exp_flag);
+void	delete_double(t_list **token_list, t_list **node, t_list **next);
 int		is_delim(char c);
+int		is_redir(t_list *node);
 
 /* util */
 char	*ft_lst_strjoin(t_list **lst);
@@ -122,6 +121,8 @@ int		ft_is_blank(int c);
 void	print_minishell(void);
 void	init_main(t_list **environ, t_list **token_list, \
 	t_token **type_list, char **envp);
+int		is_ambiguous(char *filename);
+char	**free_all(char **w_list);
 
 /* built_in */
 void	ft_export(char **simple_cmd, t_list **environ, int fd);
