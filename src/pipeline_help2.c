@@ -6,7 +6,7 @@
 /*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:49:15 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/11 16:49:18 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/11 20:20:15 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	fork_heredoc(t_cmd **pipeline, t_exec *exec)
 	if (waitpid(-1, &status, 0) > 0)
 	{
 		g_exit_code = WEXITSTATUS(status);
-		if (g_exit_code)
+		if (g_exit_code && exec->path)
 			free_all(exec->path);
 	}
 }

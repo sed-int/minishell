@@ -3,30 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   main_util.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
+/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:49:21 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/11 15:20:00 by hyunminjo        ###   ########.fr       */
+/*   Updated: 2023/08/11 20:00:34 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// void	print_minishell(void)
+// {
+// 	printf("              _         _         __          __    __ \n");
+// 	printf("   ____ ___  (_) ____  (_) _____ / /_   ___  / /   / /\n");
+// 	printf("  / __ `__ \\/ / / __ \\/ / / ___// __ \\ / _ \\/ /   / /\n");
+// 	printf(" / / / / / / / / / / / / (__  )/ / / /( ___/ /___/ /___\n");
+// 	printf("/_/ /_/ /_/_/ /_/ /_/_/ /____//_/ /_/ \\___/_____/_____/\n");
+// 	printf("                                  ver.1 @hcho2 @junssong\n");
+// }
+
 void	print_minishell(void)
 {
-	int		fd;
-	char	hello[11996];
-
-	fd = open("./parshell.txt", O_RDONLY);
-	read(fd, hello, 11996);
-	printf("%s\n", hello);
-	close(fd);
-	printf("              _         _         __          __    __ \n");
-	printf("   ____ ___  (_) ____  (_) _____ / /_   ___  / /   / /\n");
-	printf("  / __ `__ \\/ / / __ \\/ / / ___// __ \\ / _ \\/ /   / /\n");
-	printf(" / / / / / / / / / / / / (__  )/ / / /( ___/ /___/ /___\n");
-	printf("/_/ /_/ /_/_/ /_/ /_/_/ /____//_/ /_/ \\___/_____/_____/\n");
-	printf("                                  ver.1 @hcho2 @junssong\n");
+	printf("              %s_%s %s        _%s  %s     %s%s  __ \
+	     %s%s %s%s__%s%s    __ %s\n", RED, RES, ORG, RES, \
+	YEL, RES, GRE, RES, BLU, RES, NAV, RES, PUR, RES);
+	printf("   %s____ ___  (_)%s %s____  (_)%s %s_____%s%s / /_  %s %s___\
+	\b\b\b\b\b  %s%s/ /%s   %s/ /%s\n", RED, RES, ORG, RES, \
+	YEL, RES, GRE, RES, BLU, RES, NAV, RES, PUR, RES);
+	printf("  %s/ __ `__ \\/ /%s %s/ __ \\/ /%s %s/ ___%s%s// __ \\%s %s/ _ \
+	\b\b\b\b\b\\%s%s/ /%s   %s/ /%s\n", RED, RES, ORG, RES, \
+	YEL, RES, GRE, RES, BLU, RES, NAV, RES, PUR, RES);
+	printf(" %s/ / / / / / /%s %s/ / / / /%s %s(__  )%s%s/ / / /%s%s( ___/\
+	\b\b\b\b%s %s/___%s%s/ /___%s\n", RED, RES, ORG, RES, \
+	YEL, RES, GRE, RES, BLU, RES, NAV, RES, PUR, RES);
+	printf("%s/_/ /_/ /_/_/%s %s/_/ /_/_/%s %s/____/%s%s/_/ /_/%s %s\\___/\
+	\b\b\b\b\b%s%s_____/%s%s_____/%s\n", RED, RES, ORG, RES, \
+	YEL, RES, GRE, RES, BLU, RES, NAV, RES, PUR, RES);
+	printf("				%sver.1%s %s@hcho2%s %s@junsssong%s\n", \
+	GRE, RES, BLU, RES, PUR, RES);
 }
 
 t_list	*dup_envp(char **envp)

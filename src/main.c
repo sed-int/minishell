@@ -6,7 +6,7 @@
 /*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:49:04 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/11 16:56:41 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/11 20:30:03 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ char	*get_pwd(void)
 
 	tmp = getcwd(NULL, 0);
 	if (tmp == NULL)
-		return (".-$ ");
+		return (ft_strdup(".-$ "));
 	spl = ft_split(tmp, '/');
 	free(tmp);
-	if (!*spl)
+	if (spl && !*spl)
 	{
 		free_all(spl);
 		return (ft_strdup("/-$ "));
@@ -33,7 +33,8 @@ char	*get_pwd(void)
 	while (spl[size])
 		size++;
 	joined = ft_strjoin(spl[size - 1], "-$ ");
-	free_all(spl);
+	if (spl)
+		free_all(spl);
 	return (joined);
 }
 
