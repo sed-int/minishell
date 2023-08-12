@@ -32,11 +32,11 @@ OBJ			=	$(SRC:.c=.o)
 NAME		= minishell
 CC			= cc
 CFLAGS		= -Wall -Wextra -Werror
-# LDFLAGS	= -L/Users/$(USER)/.brew/opt/readline/lib  -lreadline
-LDFLAGS		= -L/opt/homebrew/opt/readline/lib -lreadline
+LDFLAGS	= -L/Users/$(USER)/.brew/opt/readline/lib  -lreadline
+# LDFLAGS		= -L/opt/homebrew/opt/readline/lib -lreadline
 LIBFLAGS	= -Llibft -lft
-# INC		= -Ilibft -I/Users/$(USER)/.brew/opt/readline/include
-INC			= -Ilibft -I/opt/homebrew/opt/readline/include
+INC		= -Ilibft -I/Users/$(USER)/.brew/opt/readline/include
+# INC			= -Ilibft -I/opt/homebrew/opt/readline/include
 
 all:		$(NAME)
 
