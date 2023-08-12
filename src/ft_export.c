@@ -6,7 +6,7 @@
 /*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:47:59 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/11 15:18:34 by hyunminjo        ###   ########.fr       */
+/*   Updated: 2023/08/12 19:45:48 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	print_export(t_list **environ, int fd)
 	iter = *environ;
 	while (iter)
 	{
+		ft_putstr_fd("declare -x ", fd);
 		ft_putendl_fd(iter->content, fd);
 		iter = iter->next;
 	}

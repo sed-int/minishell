@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:48:30 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/11 13:11:43 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/12 19:50:28 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,33 @@ int	check_more_newline(char **simple_cmd)
 	return (i);
 }
 
+int	is_n_option(char **simple_cmd)
+{
+	int	i;
+	int	j;
+
+	j = 0;
+	while (simple_cmd[++j])
+	{
+		i = 1;
+		if (simple_cmd[j][0] != '-')
+			return (0);
+		while (simple_cmd[j][i] && simple_cmd[j][i] == 'n')
+		{
+			i++;
+		}
+		if (simple_cmd[j][i] && simple_cmd[j][i] != 'n')
+			return (0);
+	}
+	return (1);
+}
+
 void	ft_echo(char **simple_cmd, t_list **environ, int fd)
 {
 	int	i;
 
 	g_exit_code = 0;
-	if (simple_cmd[1] != NULL && !ft_strcmp("-n", simple_cmd[1]))
+	if (is_n_option(simple_cmd))
 	{
 		i = check_more_newline(simple_cmd);
 		while (simple_cmd[i] != NULL)

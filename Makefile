@@ -31,10 +31,12 @@ OBJ			=	$(SRC:.c=.o)
 
 NAME		= minishell
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -Qunused-arguments
-LDFLAGS		= -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include -lreadline
-# LDFLAGS		= -L/opt/homebrew/opt/readline/lib -I/opt/homebrew/opt/readline/include -lreadline
-LIBFLAGS	= -Llibft -lft -Ilibft
+CFLAGS		= -Wall -Wextra -Werror
+# LDFLAGS	= -L/Users/$(USER)/.brew/opt/readline/lib  -lreadline
+LDFLAGS		= -L/opt/homebrew/opt/readline/lib -lreadline
+LIBFLAGS	= -Llibft -lft
+# INC		= -Ilibft -I/Users/$(USER)/.brew/opt/readline/include
+INC			= -Ilibft -I/opt/homebrew/opt/readline/include
 
 all:		$(NAME)
 
@@ -46,7 +48,7 @@ $(LIBFT):
 		@make --no-print-directory -C ./libft bonus
 
 %.o: 		%.c
-		@$(CC) $(CFLAGS) $(LIBFLAGS) $(LDFLAGS) -c $< -o $@
+		@$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
 clean:
 		@cd libft; make clean

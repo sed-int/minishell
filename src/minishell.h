@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:47:35 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/11 20:56:46 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/12 19:43:50 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	make_token(char *input, t_list **token_list, int token_size);
 void	check_pipe(int *token_size, char **input, t_list **token_list);
 void	check_lsr_grt(int *token_size, char **input, t_list **token_list);
 int		check_quote_3(int *flag, int *token_size, char **input);
-void	check_quote_2(char *word, int i, int q_flag, char *wd_flag);
+void	check_quote_2(char *word, int i, int *q_flag, char **wd_flag);
 int		help_tokenizer(char **input, int *token_size, \
 					int *flag, t_list **token_list);
 

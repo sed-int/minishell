@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dequotenizer.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:48:19 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/11 16:58:18 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/12 19:44:08 by hyunminjo        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,25 @@ char	*modify_word(char *word, char *wd_flag, int wd_len)
 	return (res);
 }
 
-void	check_quote_2(char *word, int i, int q_flag, char *wd_flag)
+void	check_quote_2(char *word, int i, int *q_flag, char **wd_flag)
 {
 	if (word[i] && word[i] == '\"')
 	{
-		if (q_flag != '\'')
-			wd_flag[i] = 1;
-		if (q_flag == 0)
-			q_flag = '\"';
-		else if (q_flag == '\"')
-			q_flag = 0;
+		if (*q_flag != '\'')
+			(*wd_flag)[i] = 1;
+		if (*q_flag == 0)
+			*q_flag = '\"';
+		else if (*q_flag == '\"')
+			*q_flag = 0;
 	}
 	else if (word[i] && word[i] == '\'')
 	{
-		if (q_flag != '\"')
-			wd_flag[i] = 1;
-		if (q_flag == 0)
-			q_flag = '\'';
-		else if (q_flag == '\'')
-			q_flag = 0;
+		if (*q_flag != '\"')
+			(*wd_flag)[i] = 1;
+		if (*q_flag == 0)
+			*q_flag = '\'';
+		else if (*q_flag == '\'')
+			*q_flag = 0;
 	}
 }
 
@@ -80,7 +80,7 @@ void	dequotenize(t_token **type_list)
 		i = 0;
 		while (word[i])
 		{
-			check_quote_2(word, i, q_flag, wd_flag);
+			check_quote_2(word, i, &q_flag, &wd_flag);
 			i++;
 		}
 		iter->content = modify_word(word, wd_flag, ft_strlen(word));
