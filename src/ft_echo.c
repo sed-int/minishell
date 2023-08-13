@@ -6,7 +6,7 @@
 /*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:48:30 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/13 14:25:29 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/13 14:30:19 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,5 @@ void	ft_echo(char **simple_cmd, t_list **environ, int fd)
 		i++;
 	}
 	if (newline_flag)
-		write(fd, "\n", 1);
+		ft_putchar_fd('\n', fd);
 }

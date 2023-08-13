@@ -6,7 +6,7 @@
 /*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:49:44 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/11 13:44:26 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/13 14:31:18 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,18 +64,4 @@ char	*valid(char **path, char *command)
 	}
 	free(path_cmd);
 	return (NULL);
-}
-
-int	is_ambiguous(char *filename)
-{
-	char	**temp;
-	int		len;
-
-	temp = ft_split(filename, ' ');
-	len = 0;
-	while (temp[len])
-		len++;
-	if (len > 1)
-		return (1);
-	return (0);
 }

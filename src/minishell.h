@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunminjo <hyunminjo@student.42.fr>        +#+  +:+       +#+        */
+/*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:47:35 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/12 19:43:50 by hyunminjo        ###   ########.fr       */
+/*   Updated: 2023/08/13 14:31:13 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,6 @@ int		ft_is_blank(int c);
 void	print_minishell(void);
 void	init_main(t_list **environ, t_list **token_list, \
 	t_token **type_list, char **envp);
-int		is_ambiguous(char *filename);
 char	**free_all(char **w_list);
 
 #endif

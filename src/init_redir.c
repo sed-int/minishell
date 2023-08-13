@@ -6,7 +6,7 @@
 /*   By: hcho2 <hcho2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 20:48:57 by hcho2             #+#    #+#             */
-/*   Updated: 2023/08/11 15:11:05 by hcho2            ###   ########.fr       */
+/*   Updated: 2023/08/13 14:31:05 by hcho2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,6 @@ int	open_redir_in(t_cmd *cmd, t_token *iter)
 {
 	if (cmd->io_fd[0] != 0)
 		close(cmd->io_fd[0]);
-	if (is_ambiguous(iter->content))
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(iter->content, 2);
-		ft_putendl_fd(": ambiguous redirect", 2);
-		return (OPEN_ERROR);
-	}
 	cmd->io_fd[0] = open(iter->content, O_RDONLY);
 	if (cmd->io_fd[0] < 0)
 	{
@@ -37,13 +30,6 @@ int	open_redir_out_grt(t_cmd *cmd, t_token *iter)
 {
 	if (cmd->io_fd[1] != 1)
 		close(cmd->io_fd[1]);
-	if (is_ambiguous(iter->content))
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(iter->content, 2);
-		ft_putendl_fd(": ambiguous redirect", 2);
-		return (OPEN_ERROR);
-	}
 	cmd->io_fd[1] = open(iter->content, O_TRUNC | O_WRONLY | O_CREAT, 0644);
 	if (cmd->io_fd[1] < 0)
 	{
@@ -58,13 +44,6 @@ int	open_redir_out_dgrt(t_cmd *cmd, t_token *iter)
 {
 	if (cmd->io_fd[1] != 1)
 		close(cmd->io_fd[1]);
-	if (is_ambiguous(iter->content))
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(iter->content, 2);
-		ft_putendl_fd(": ambiguous redirect", 2);
-		return (OPEN_ERROR);
-	}
 	cmd->io_fd[1] = open(iter->content, O_APPEND | O_WRONLY | O_CREAT, 0644);
 	if (cmd->io_fd[1] < 0)
 	{
