@@ -1,0 +1,29 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../boj"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"ft_printf.h": "c",
+			"get_next_line.h": "c",
+			"algorithm": "c",
+			"random": "c",
+			"push_swap.h": "c",
+			"iterator": "c",
+			"push_swap_bonus.h": "c",
+			"stdlib.h": "c",
+			"mlx.h": "c",
+			"pipex.h": "c",
+			"ratio": "c",
+			"pipex_bonus.h": "c",
+			"libft.h": "c",
+			"uio.h": "c",
+			"iosfwd": "cpp"
+		}
+	}
+}
